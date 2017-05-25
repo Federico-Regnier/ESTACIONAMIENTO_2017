@@ -1,4 +1,5 @@
 <?
+include_once("./AccesoDatos.php");
 
 class Usuario{
     public $username;
@@ -14,24 +15,35 @@ class Usuario{
     }
     
     function agregarUsuario(){
+        // Falta checkear que el usuario no exista y arreglar la fecha
         $success = false;
         $message = "";
         try{
-            $pdo = new PDO('mysql:host:localhost; dbname:Estacionamiento', 'root', '12345');
-            $consulta = $pdo->query("INSERT into Usuarios(Username, Password, Nombre, Rol, Baja, Fecha) values (:username, :pass, :nombre, :rol, 0, :fecha)");
-            $consulta->bindParam(":username", $this->username);
-            $consulta->bindParam(":pass", $this->pass);
-            $consulta->bindParam(":nombre", $this->nombreCompleto);
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("INSERT into Usuarios(Username, Password, Nombre, Rol, Baja, Fecha) values (:username, :pass, :nombre, :rol, 0, :fecha)");
+            $consulta->bindParam(":username", $this->username, PDO::PARAM_STR, 25);
+            $consulta->bindParam(":pass", $this->pass, PDO::PARAM_STR, 50);
+            $consulta->bindParam(":nombre", $this->nombreCompleto, PDO::PARAM_STR, 50);
             $consulta->bindParam(":rol", $this->rol);
             $consulta->bindValue(":fecha", 'NOW()');
-            $consulta->execute();
-            $success = true;
-
-        }catch($e){
-            $message = "Error al agregar usuario;
-            
+            $success = $consulta->execute();
+        } catch(PDOException $err){
+            $message = "Error al agregar usuario";
+            $innerMessage = $err->getMessage();
         }
-        return array("Success" -> $success, "Mensaje" -> $message);
+
+        return array("Success" => $success, "Mensaje" => $message);
+    }
+
+    function traerUsuarios(){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT (Username, Password, Nombre, Rol) from Usuarios");
+            $consulta->execute();
+            return $consulta->fetchall();
+        } catch(PDOException $err){
+            return array("Error" => $err->getMessage());
+        }
     }
 }
 
