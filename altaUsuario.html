@@ -12,40 +12,42 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
     <title>Alta de Usuarios</title>
 </head>
 <body>
 <div class="container">
-    <form class="form-horizontal" role="form" >
+    <form class="form-horizontal" role="form" id="userForm">
         <h2 class="col-sm-offset-5">Registrar Usuario</h2>
         <div class="form-group">
             <label for="firstName" class="col-sm-3 control-label">Nombre Completo</label>
             <div class="col-sm-9">
-                <input type="text" id="firstName" placeholder="Nombre Apellido" class="form-control" autofocus>
+                <input type="text" name="name" placeholder="Nombre Apellido" class="form-control" autofocus required>
                 <span class="help-block">Nombre Apellido, ej.: Juan Perez</span>
             </div>
         </div>
         <div class="form-group">
             <label for="usuario" class="col-sm-3 control-label">Usuario</label>
             <div class="col-sm-9">
-                <input type="text" id="usuario" placeholder="Usuario" class="form-control">
+                <input type="text" name="username" placeholder="Usuario" class="form-control" required>
+                <span class="help-block">Nombre de usuario para loguearse</span>
             </div>
         </div>
         <div class="form-group">
             <label for="password" class="col-sm-3 control-label">Contrase&ntilde;a</label>
             <div class="col-sm-9">
-                <input type="password" id="password" placeholder="Contrase&ntilde;a" class="form-control">
+                <input type="password" name="password" placeholder="Contrase&ntilde;a" class="form-control" required>
             </div>
         </div>
         <div class="form-group" id="rol">
             <div class="col-sm-offset-3 col-sm-9">
-                <label class="radio-inline"><input type="radio" name="rol">Empleado</label>
-                <label class="radio-inline"><input type="radio" name="rol">Administrador</label>
+                <label class="radio-inline"><input type="radio" name="rol" required checked value="1">Empleado</label>
+                <label class="radio-inline"><input type="radio" name="rol" required value="2">Administrador</label>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-9 col-sm-offset-3">
-                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                <button type="submit" class="btn btn-primary btn-block" >Registrar</button>
             </div>
         </div>
         

@@ -15,7 +15,7 @@ class Usuario{
     }
     
     function agregarUsuario(){
-        // Falta checkear que el usuario no exista y arreglar la fecha
+        // FIXME: arreglar la fecha
         $success = false;
         $message = "";
         try{
@@ -35,7 +35,7 @@ class Usuario{
         return array("Success" => $success, "Mensaje" => $message);
     }
 
-    function traerUsuarios(){
+    static function traerUsuarios(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
             $consulta = $pdo->RetornarConsulta("SELECT (Username, Password, Nombre, Rol) from Usuarios");
@@ -44,6 +44,42 @@ class Usuario{
         } catch(PDOException $err){
             return array("Error" => $err->getMessage());
         }
+    }
+
+    static function existeUsername($username){
+        if(empty($username))
+            die();
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT Username FROM Usuarios WHERE Username = :user");
+            $consulta->bindValue(":user", $username, PDO::PARAM_STR);
+            $consulta->execute();
+            
+            return $consulta->rowCount() > 0 ? true : false;
+            
+        } catch(PDOException $err){
+            return array("Error" => $err->getMessage());
+        }
+    }
+
+    static function login($username, $pass){
+        if(empty($username) || empty($pass)){
+            return false;
+        }
+
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT Username, Password FROM Usuarios WHERE Username = :user AND Password = :pass");
+            $consulta->bindValue(":user", $username, PDO::PARAM_STR);
+            $consulta->bindValue(":pass", $pass, PDO::PARAM_STR);
+            $consulta->execute();
+            
+            return $consulta->rowCount() > 0 ? true : false;
+            
+        } catch(PDOException $err){
+            return array("Error" => $err->getMessage());
+        }
+
     }
 }
 
