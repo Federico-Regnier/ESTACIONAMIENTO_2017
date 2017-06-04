@@ -1,5 +1,6 @@
 <?php
 require_once("../lib/nusoap.php");
+require_once("usuario.php");
 
 $server = new nusoap_server();
 
@@ -61,9 +62,28 @@ $server->register('TraerUsuarios',
                     'Traer una lista con todos los usuarios'
 );
 
+$server->register('SuspenderUsuario',
+                    array("id" => 'xsd:int'),
+                    array("Resultado" => 'xsd:string'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#SuspenderUsuario',
+                    'rpc',
+                    'encoded',
+                    'Suspender a un usuario'
+);
+
+$server->register('HabilitarUsuario',
+                    array("id" => 'xsd:int'),
+                    array("Resultado" => 'xsd:string'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#HabilitarUsuario',
+                    'rpc',
+                    'encoded',
+                    'Habilitar a un usuario'
+);
+
 
 function AgregarUsuario($usuario){
-    include_once("usuario.php");
     $usuario["usuario"] = trim($usuario["usuario"]);
     if(Usuario::ExisteUsuario($usuario["usuario"])){
         return array("Status" => "Error", "Mensaje" => "El usuario ya existe");
@@ -74,7 +94,6 @@ function AgregarUsuario($usuario){
 }
 
 function Login($usuario, $pass){
-    include_once("usuario.php");
     if(!isset($usuario) || !isset($pass)){
         return array();
     }
@@ -91,6 +110,14 @@ function Login($usuario, $pass){
 function TraerUsuarios(){
     include_once("usuario.php");
     return Usuario::TraerUsuarios();
+}
+
+function SuspenderUsuario($id){
+    return Usuario::SuspenderUsuario($id);
+}
+
+function HabilitarUsuario($id){
+    return Usuario::HabilitarUsuario($id);
 }
 
 $HTTP_RAW_POST_DATA = file_get_contents("php://input");

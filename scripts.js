@@ -37,6 +37,32 @@ $(function(){
         if (!$this.hasClass('active')){
             $this.addClass('active');
         }
+
+
+    });
+
+    $("#divContenido").on('click', "#editLink", function(event){
+        event.preventDefault();
+        if($(this).parent().parent().data("baja") == 0){
+            var datos = {"Suspender" : true, "id" : $(this).data("id")};
+            alert("suspender");
+        } else{
+            var datos = {"Habilitar" : true, "id" : $(this).data("id")};
+            alert("habilitar");
+        }
+        $.ajax({
+            url: "administrador.php",
+            data: datos,
+            method: 'POST',
+            async: true
+        }).done(function(result){
+            if(result != "error"){
+                $("#divContenido").load("listadoUsuarios.php");
+            } else{
+                alert("No se pudo suspender el usuario");
+            }
+        });
     });
     
 });
+

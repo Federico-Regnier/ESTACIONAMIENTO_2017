@@ -38,4 +38,28 @@ if(isset($_POST["usuario"]) && isset($_POST["password"]) && isset($_POST["rol"])
     }
 
 }
+
+if(isset($_POST["Suspender"])){
+    include_once("cliente.php");
+    $resultado = Cliente::Execute('SuspenderUsuario', array($_POST["id"]));
+    if($resultado["Status"] == 'success'){
+        echo $resultado["Resultado"];
+    } else{
+        echo "Error al comunicarse con el web service";
+        echo $resultado["Resultado"];
+    }
+
+}
+
+if(isset($_POST["Habilitar"])){
+    include_once("cliente.php");
+    $resultado = Cliente::Execute('HabilitarUsuario', array($_POST["id"]));
+    if($resultado["Status"] == 'success'){
+        echo $resultado["Resultado"];
+    } else{
+        echo "Error al comunicarse con el web service";
+        echo $resultado["Resultado"];
+    }
+}
+
 ?>

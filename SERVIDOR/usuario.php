@@ -87,6 +87,36 @@ class Usuario{
             return false;
         }
     }
+
+    static function SuspenderUsuario($id){
+        if($id < 1){
+            return "error";
+        }
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("UPDATE Usuarios SET Baja = 1 WHERE ID = :id");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+            return $consulta->rowCount > 0? "success" : "error";
+        } catch(PDOException $err){
+            return "error";
+        }
+    }
+
+    static function HabilitarUsuario($id){
+        if($id < 1){
+            return "error";
+        }
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("UPDATE Usuarios SET Baja = 0 WHERE ID = :id");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+            return $consulta->rowCount > 0? "success" : "error";
+        } catch(PDOException $err){
+            return "error";
+        }
+    }
 }
 
 ?>
