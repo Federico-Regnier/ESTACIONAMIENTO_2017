@@ -84,7 +84,6 @@ function Login($usuario, $pass){
     if($resultado){
         return $resultado;
     }
-    
     return array();
 
 }

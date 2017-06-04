@@ -14,8 +14,10 @@ if(isset($_POST["usuario"]) && isset($_POST["password"])){
         $_SESSION["ID"] = $result["Resultado"]["ID"];
         $_SESSION["Rol"] = $result["Resultado"]["Rol"];
         echo "success";
+    }else{
+        echo "Usuario o contrase&ntilde;a incorrectos";
     }
-    echo "Usuario o contrase&ntilde;a incorrectos";
+    
 }
 
 ?>

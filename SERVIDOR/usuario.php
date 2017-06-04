@@ -65,12 +65,27 @@ class Usuario{
             $consulta->bindValue(":pass", $pass, PDO::PARAM_STR);
             $consulta->execute();
             
-            return $consulta->rowCount() > 0 ? $consulta->fetch(PDO::FETCH_ASSOC) : false;
+            if($consulta->rowCount() > 0){
+                $user = $consulta->fetch(PDO::FETCH_ASSOC);
+                return Usuario::RegistrarLogin($user["ID"])? $user : false;
+            }
+            
             
         } catch(PDOException $err){
             return array("Error" => $err->getMessage());
         }
 
+    }
+
+    static function RegistrarLogin($id){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("INSERT INTO login_usuarios VALUES (:id, NOW())");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            return $consulta->execute();
+        } catch(PDOException $err){
+            return false;
+        }
     }
 }
 
