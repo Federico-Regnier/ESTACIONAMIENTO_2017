@@ -36,13 +36,13 @@ include_once("checkSesion.php");
         <div class="navbar-collapse collapse" id="navigationbar">
           <ul class="nav navbar-nav" id="navbar">
             <li class="active"><a href="main.php">Home</a></li>
-            <li><a href="#" id="linkEmpleados">Empleados</a></li>
+            <li><a href="#" id="">Autos</a></li>
             <li><a href="#contact">Estadisticas</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Autos <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Empleados <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Entrada</a></li>
-                <li><a href="#">Salida</a></li>
+                <li><a href="#" id="listadoEmpleados">Listado</a></li>
+                <li><a href="#" id="agregarEmpleado">Agregar</a></li>
               </ul>
             </li>
           </ul>

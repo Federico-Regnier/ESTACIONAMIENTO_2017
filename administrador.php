@@ -62,4 +62,15 @@ if(isset($_POST["Habilitar"])){
     }
 }
 
+if(isset($_POST["Borrar"])){
+    include_once("cliente.php");
+    $resultado = Cliente::Execute('BorrarUsuario', array($_POST["id"]));
+    if($resultado["Status"] == 'success'){
+        echo $resultado["Resultado"];
+    } else{
+        echo "Error al comunicarse con el web service";
+        echo $resultado["Resultado"];
+    }
+}
+
 ?>

@@ -82,6 +82,16 @@ $server->register('HabilitarUsuario',
                     'Habilitar a un usuario'
 );
 
+$server->register('BorrarUsuario',
+                    array("id" => 'xsd:int'),
+                    array("Resultado" => 'xsd:string'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#BorrarUsuario',
+                    'rpc',
+                    'encoded',
+                    'Borra un usuario'
+);
+
 
 function AgregarUsuario($usuario){
     $usuario["usuario"] = trim($usuario["usuario"]);
@@ -118,6 +128,10 @@ function SuspenderUsuario($id){
 
 function HabilitarUsuario($id){
     return Usuario::HabilitarUsuario($id);
+}
+
+function BorrarUsuario($id){
+    return Usuario::BorrarUsuario($id);
 }
 
 $HTTP_RAW_POST_DATA = file_get_contents("php://input");

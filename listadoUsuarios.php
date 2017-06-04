@@ -1,6 +1,6 @@
 <?php
 require_once("cliente.php");
-
+require_once("checkSesion.php");
 $resultado = Cliente::Execute("TraerUsuarios", array());
 
 if($resultado["Status"] == "error"){
@@ -27,6 +27,8 @@ if($resultado["Status"] == "error"){
                         <tbody>
                             <?php
                             foreach ($resultado["Resultado"] as $value) {
+                                if($value["ID"] == $_SESSION["ID"])
+                                    continue;
                             ?>
                             <tr data-baja="<?php echo $value["Baja"] ?>">
                                 <td>
@@ -58,7 +60,7 @@ if($resultado["Status"] == "error"){
                                             <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
                                         </span>
                                     </a>
-                                    <a href="#borrar" class="table-link danger" id="<?php echo $value["ID"];?>">
+                                    <a href="javascript:void(0)" class="table-link danger" onclick="Borrar(<?php echo $value["ID"];?>)">
                                         <span class="fa-stack">
                                             <i class="fa fa-square fa-stack-2x"></i>
                                             <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
@@ -69,6 +71,7 @@ if($resultado["Status"] == "error"){
                             <?php        
                                 }    
                             ?>
+                            
                         </tbody>
                     </table> <!--/ .user-list -->
                 </div>  <!--/ .table-responsive -->

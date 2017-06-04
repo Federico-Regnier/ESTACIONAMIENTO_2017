@@ -97,7 +97,7 @@ class Usuario{
             $consulta = $pdo->RetornarConsulta("UPDATE Usuarios SET Baja = 1 WHERE ID = :id");
             $consulta->bindValue(":id", $id, PDO::PARAM_INT);
             $consulta->execute();
-            return $consulta->rowCount > 0? "success" : "error";
+            return $consulta->rowCount() > 0? "success" : "error";
         } catch(PDOException $err){
             return "error";
         }
@@ -112,7 +112,22 @@ class Usuario{
             $consulta = $pdo->RetornarConsulta("UPDATE Usuarios SET Baja = 0 WHERE ID = :id");
             $consulta->bindValue(":id", $id, PDO::PARAM_INT);
             $consulta->execute();
-            return $consulta->rowCount > 0? "success" : "error";
+            return $consulta->rowCount() > 0? "success" : "error";
+        } catch(PDOException $err){
+            return "error";
+        }
+    }
+    
+    static function BorrarUsuario($id){
+        if($id < 1){
+            return "error";
+        }
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("DELETE FROM Usuarios WHERE ID = :id");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+            return $consulta->rowCount() > 0? "success" : "error";
         } catch(PDOException $err){
             return "error";
         }

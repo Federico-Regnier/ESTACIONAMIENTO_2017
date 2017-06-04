@@ -2,7 +2,7 @@
 
 include_once("SERVIDOR/usuario.php");
 
-echo Usuario::SuspenderUsuario(3);
+echo Usuario::BorrarUsuario(3);
 
 
 ?>

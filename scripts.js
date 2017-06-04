@@ -7,7 +7,8 @@ $(function(){
             method: "POST",
             
         }).done(function(result){
-            alert(result);
+            window.location.href = "main.php";
+            $("#divContenido").html('<div class="alert alert-success">Usuario agregado con exito</div>');
         });
     });
 
@@ -29,7 +30,7 @@ $(function(){
         });
     });
 
-    $("#linkEmpleados").click(function(event){
+    $("#listadoEmpleados").click(function(event){
         event.preventDefault();
         $("#divContenido").load("listadoUsuarios.php");
         $('#navbar li.active').removeClass('active');
@@ -39,6 +40,16 @@ $(function(){
         }
 
 
+    });
+
+    $("#agregarEmpleado").click(function(event){
+        event.preventDefault();
+        $("#divContenido").load("altaUsuario.php");
+        $('#navbar li.active').removeClass('active');
+        var $this = $(this).parent();
+        if (!$this.hasClass('active')){
+            $this.addClass('active');
+        }
     });
 
     $("#divContenido").on('click', "#editLink", function(event){
@@ -63,6 +74,19 @@ $(function(){
             }
         });
     });
-    
 });
 
+function Borrar(id){
+        $.ajax({
+            url: "administrador.php",
+            data: {"Borrar": true, "id": id},
+            method: 'POST',
+            async: true
+        }).done(function(result){
+            if(result != "error"){
+                $("#divContenido").load("listadoUsuarios.php");
+            } else{
+                alert("No se pudo borrar el usuario");
+            }
+        });
+    }
