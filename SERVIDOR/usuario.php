@@ -18,7 +18,7 @@ class Usuario{
             $consulta->bindParam(":dni", $usuario["dni"], PDO::PARAM_STR, 50);
             $consulta->bindParam(":rol", $usuario["rol"]);
             $success = $consulta->execute();
-            $status = "exito";
+            $status = "success";
             $message = "Usuario agregado con exito";
         } catch(PDOException $err){
             $message = $err->getMessage();
@@ -30,7 +30,7 @@ class Usuario{
     static function TraerUsuarios(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT ID, Apellido, Nombre,  DNI, Usuario, Rol, Fecha, Baja FROM Usuarios ORDER BY Apellido, Nombre");
+            $consulta = $pdo->RetornarConsulta("SELECT ID, Apellido, Nombre,  DNI, Usuario, Rol, Fecha, Baja FROM Usuarios  WHERE Baja != 2 ORDER BY Apellido, Nombre");
             $consulta->execute();
             return $consulta->fetchall(PDO::FETCH_ASSOC);
         } catch(PDOException $err){
@@ -56,7 +56,7 @@ class Usuario{
 
     static function Login($username, $pass){
         if(empty($username) || empty($pass)){
-            return false;
+            return "Usuario o contrase&ntilde;a incorrectos";
         }
         try{
             $pdo = AccesoDatos::getAccesoDB();
@@ -67,10 +67,15 @@ class Usuario{
             
             if($consulta->rowCount() > 0){
                 $user = $consulta->fetch(PDO::FETCH_ASSOC);
-                return Usuario::RegistrarLogin($user["ID"])? $user : false;
+                if($user["Baja"] == 0){
+                    return Usuario::RegistrarLogin($user["ID"])? $user : "Error al ingresar";
+                } else{
+                    return "Usuario Suspendido";
+                }
             }
-            
-            
+
+            return "Usuario o contrase&ntilde;a incorrectos";
+
         } catch(PDOException $err){
             return array("Error" => $err->getMessage());
         }
@@ -124,7 +129,7 @@ class Usuario{
         }
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("DELETE FROM Usuarios WHERE ID = :id");
+            $consulta = $pdo->RetornarConsulta("UPDATE Usuarios SET Baja = 2 WHERE ID = :id");
             $consulta->bindValue(":id", $id, PDO::PARAM_INT);
             $consulta->execute();
             return $consulta->rowCount() > 0? "success" : "error";

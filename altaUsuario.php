@@ -1,8 +1,6 @@
 <?php
-
 include_once("checkSesion.php");
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,17 +9,18 @@ include_once("checkSesion.php");
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="scripts.js"></script>
+    <script></script>
+    <?php include_once("navbarAdmin.php");?>
     <title>Alta de Usuarios</title>
 </head>
 <body>
-<div class="container">
+<div class="container" id="divContenido">
+    <div id="divResultado" class="col-sm-offset-3"></div>
     <form class="form-horizontal" role="form" id="userForm">
         <h2 class="col-sm-offset-5"> Registrar Usuario</h2>
         <div class="form-group">

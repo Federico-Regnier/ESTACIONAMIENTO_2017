@@ -44,6 +44,5 @@ include_once("checkSesion.php");
             </form>
         </div>
     </div>
-    
 </body>
 </html>

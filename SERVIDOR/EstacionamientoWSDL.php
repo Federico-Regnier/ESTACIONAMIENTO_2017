@@ -110,10 +110,10 @@ function Login($usuario, $pass){
 
     $resultado = Usuario::Login($usuario, $pass);
 
-    if($resultado){
+    if(isset($resultado["ID"])){
         return $resultado;
     }
-    return array();
+    return array("Mensaje" => $resultado);
 
 }
 

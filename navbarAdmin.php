@@ -8,13 +8,20 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.php">Estacionamiento</a>
+        <a class="navbar-brand" href="main.php">Estacionamiento</a>
     </div> <!--/ .navbar-header -->
     <div class="navbar-collapse collapse" id="navigationbar">
         <ul class="nav navbar-nav" id="navbar">
-        <li class="active"><a href="index.php">Home</a></li>
-        <li><a href="#" id="">Ingresar Auto</a></li>
-        <li><a href="#">Salida Auto</a></li>
+            <li class=""><a href="main.php">Home</a></li>
+            <li><a href="index.php" id="">Autos</a></li>
+            <li><a href="#contact">Estadisticas</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Empleados <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li><a href="listadoUsuarios.php" id="listadoEmpleados">Listado</a></li>
+                <li><a href="altaUsuario.php" id="agregarEmpleado">Agregar</a></li>
+                </ul>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
         <li><a href="#" id="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -22,3 +29,8 @@
     </div><!--/.nav-collapse -->
     </div><!--/ .container -->
 </nav>
+<style>
+    body{
+        padding-top: 70px !important;
+    }
+</style>
