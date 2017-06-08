@@ -15,13 +15,18 @@ include_once("checkSesion.php");
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
     <script src="cocheras.js"></script>
+    <script src="scripts.js"></script>
     <style>
         body{
             padding-top: 70px;
         }
     </style>
     <title>Estacionamiento</title>
-    <?php include_once("navbarEmpleado.html");?>
+    <?php 
+    if($_SESSION["Rol"] == 2)
+        include_once("navbarAdmin.php");
+    else
+        include_once("navbarEmpleado.html");?>
 </head>
 <body>
     <div class="container-fluid">

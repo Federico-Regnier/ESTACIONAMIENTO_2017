@@ -7,6 +7,7 @@ $(function(){
             $(this).parent().addClass('active');
         }
     });
+    
     $("#userForm").submit(function(event){
         event.preventDefault();
         $.ajax({

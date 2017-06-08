@@ -1,5 +1,5 @@
 <?php
-include_once("checkSesion.php");
+include_once("checkSesionAdmin.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">

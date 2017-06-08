@@ -19,33 +19,6 @@ if(isset($_POST["usuario"]) && isset($_POST["password"]) && isset($_POST["rol"])
     } else{
         echo json_encode(array("Mensaje" => "Error al comunicarse con el webservice"));
     }
-    /*
-    $host = "http://localhost/ESTACIONAMIENTO_2017/SERVIDOR/EstacionamientoWSDL.php";
-    $client = new nusoap_client($host . '?wsdl');
-    
-
-    // Verifico que el cliente se haya creado
-    $error = $client->getError();
-    if($error){
-        echo json_encode(array("Status" => "error", "Mensaje" => $error));
-        die();
-    }
-
-    
-
-    $result = $client->call("AgregarUsuario", array("Usuario" => $usuario));
-    if ($client->fault) {
-			echo json_encode(array("Status" => "error", "Mensaje" => $result));
-    } else {
-        $err = $client->getError();
-        if ($err) {
-            echo json_encode(array("Status" => "error" , "Mensaje" => $err));;
-        } 
-        else {
-            echo json_encode($result);
-        }
-    }*/
-
 }
 
 if(isset($_POST["Suspender"])){

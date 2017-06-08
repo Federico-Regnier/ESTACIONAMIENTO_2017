@@ -1,8 +1,6 @@
 <?php
 
 include_once("checkSesion.php");
-include_once("cochera.php");
-
 $resultado = Cochera::RetornarCocherasLibres();
 //var_dump($resultado);
 

@@ -1,4 +1,4 @@
-<?php require_once("checkSesion.php"); ?>
+<?php require_once("checkSesionAdmin.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -12,18 +12,37 @@ $app->post('/Auto',function()use($app){
         $color = $app->request->post("Color");
         $marca = $app->request->post("Marca");
         
+
         $cochera = new Cochera($idUsuario, $idCochera, $patente, $color, $marca);
         $resultado = $cochera->AgregarAuto();
         $app->response->status(200);
-        $app->response->body(json_encode(array("Status" => $resultado)));
+        $app->response->body($resultado);
 });
 
 $app->put('/Auto',function()use($app){
     $app->response->headers->set("Content-type", "application/json");
-    $patente = $app->request->put("patente");
-    $cochera = Cochera::BuscarAuto($patente);
-    //$cochera->sacarAuto();
+    $patente = $app->request->put("Patente");
+    $cochera = Cochera::BuscarPorPatente($patente);
+    if($cochera == null){
+        $resultado = json_encode(array("Status" => "error", "Mensaje" => "Patente incorrecta"));
+    } else{
+        $resultado = $cochera->SacarAuto();
+    }
+
+    $app->response->status(200);
+    $app->response->body($resultado);
     
+});
+
+$app->get('/Cocheras/:estado',function($estado)use($app){
+    $app->response->headers->set("Content-type", "application/json");
+    if($estado == "libres"){
+        $respuesta = Cochera::RetornarCocherasLibres();
+        $app->response->status(200);
+        $app->response->body($respuesta);
+    } else{
+        $app->response->status(404);
+    }
 });
 
 

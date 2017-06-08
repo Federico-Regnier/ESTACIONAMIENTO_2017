@@ -1,15 +1,20 @@
 <?php
-require_once("../SERVIDOR/AccesoDatos.php");
-class Cochera{
-    public $idEmpleado;
-    public $idCochera;
-    public $patente;
-    public $marca;
-    public $color;
-    public $fechaIngreso;
-
+require_once("AccesoDatos.php");
+class Cochera implements JsonSerializable{
+    private $id;
+    private $idEmpleado;
+    private $idCochera;
+    private $pisoCochera;
+    private $numeroCochera;
+    private $patente;
+    private $marca;
+    private $color;
+    private $fechaIngreso;
+    private $fechaSalida;
+    private $tiempo;
+    private $importe;
     
-    public function __construct($id_empleado, $id_cochera, $patente, $marca, $color){
+    public function __construct($id_empleado=0, $id_cochera=0, $patente="", $marca="", $color=""){
         $this->idEmpleado = $id_empleado;
         $this->idCochera = $id_cochera;
         $this->patente = $patente;
@@ -17,29 +22,41 @@ class Cochera{
         $this->color = $color;
     }
 
-    
     public function AgregarAuto(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("INSERT INTO Movimientos(ID_Cochera, ID_Empleado, Patente, Color, Marca,Fecha_Ingreso)"
-                                    ."VALUES(:cochera, :id, :patente, :color, :marca, NOW())");
-            
+            $consulta = $pdo->RetornarConsulta("INSERT INTO Movimientos(ID_Cochera, ID_Empleado, Patente, Color, Marca, Fecha_Ingreso)
+                                                VALUES(:cochera, :idEmpleado, :patente, :color, :marca, NOW())");
             $consulta->bindValue(":cochera", $this->idCochera, PDO::PARAM_INT);
-            $consulta->bindValue(":id", $this->idEmpleado, PDO::PARAM_INT);
+            $consulta->bindValue(":idEmpleado", $this->idEmpleado, PDO::PARAM_INT);
             $consulta->bindValue(":patente", $this->patente, PDO::PARAM_STR);
             $consulta->bindValue(":color", $this->color, PDO::PARAM_STR);
             $consulta->bindValue(":marca", $this->marca, PDO::PARAM_STR);
             $consulta->execute();
 
             if($consulta->rowCount() > 0){
-                return $this->OcuparCochera();
+                $resultado = $this->OcuparCochera() ? array("Status" => "success") : AccesoDatos::ErrorMessageDB();
+                return json_encode($resultado);
             }
-            return "error";
+            return json_encode(AccesoDatos::ErrorMessageDB());
         } catch(PDOException $err){
-            return "error";
+            return json_encode(AccesoDatos::ErrorMessageDB($err));
         }
         
     } 
+
+    public function SacarAuto(){
+        try{
+            $this->CalcularImporte();
+            $this->UpdateMovimiento();
+            
+            $resultado = $this->DesocuparCochera() ? $this : array("Status" => "error", "Mensaje" =>"Error al liberar la cochera.");
+            return json_encode($resultado);
+
+        } catch(PDOException $err){
+            return json_encode(AccesoDatos::ErrorMessageDB($err));
+        }
+    }
 
     private function OcuparCochera(){
         try{
@@ -49,48 +66,115 @@ class Cochera{
             $consulta->bindValue(":id", $this->idCochera, PDO::PARAM_INT);
             $consulta->execute();
 
-            return $consulta->rowCount() > 0 ? "success" : "error";
+            return $consulta->rowCount() > 0;
             
         } catch(PDOException $err){
-            return "error";
+            return false;
+        }
+    }
+
+    private function DesocuparCochera(){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("UPDATE Cochera SET Estado = 0 WHERE ID =:id");
+            
+            $consulta->bindValue(":id", $this->idCochera, PDO::PARAM_INT);
+            $consulta->execute();
+
+            return $consulta->rowCount() > 0 ? true : "cochera no updateada";
+            
+        } catch(PDOException $err){
+            return false;
         }
         
     } 
 
-    public static function BuscarAuto($patente){
+    private function CalcularImporte(){
+        if($this->tiempo < 9){
+            $this->importe = ($this->tiempo + 1) * 10;
+        } else if($this->tiempo <= 12){
+            $this->importe = 90;
+        } else{
+            $this->importe = ceil($this->tiempo / (float)24) * 170;
+        }
+    }
+
+    private function UpdateMovimiento(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT  ID_Cochera as idCochera, 
-                                                        ID_Empleado as idEmpleado,
-                                                        Patente as patente,
-                                                        Color as color,
-                                                        Marca as marca, 
-                                                        Fecha_Ingreso as fechaIngreso
-                                                FROM Movimientos WHERE Patente =:patente");
-            
-            $consulta->bindValue(":patente", $this->idCochera, PDO::PARAM_INT);
+            $consulta = $pdo->RetornarConsulta("UPDATE Movimientos SET Fecha_Salida =:fechaSalida , Importe =:importe WHERE ID = :id");
+            $consulta->bindValue(":fechaSalida", $this->fechaSalida, PDO::PARAM_STR);
+            $consulta->bindValue(":importe", $this->importe,PDO::PARAM_STR);
+            $consulta->bindValue(":id", $this->id, PDO::PARAM_INT);
             $consulta->execute();
-            $cochera = $consulta->fetchObject("Cochera");
-            return $cochera;
+
+            return $consulta->rowCount() > 0 ? "success" : "error";
+            
+        } catch(PDOException $err){
+            return json_encode(AccesoDatos::ErrorMessageDB($err));
+        }
+    }
+
+    public function jsonSerialize()
+    {
+        //$vars = get_object_vars($this);
+        return [
+            'Piso' => $this->pisoCochera,
+            'Numero' => $this->numeroCochera,
+            'Patente' => $this->patente, 
+            'Color' => $this->color,
+            'Marca' => $this->marca,
+            'FechaIngreso' => $this->fechaIngreso,
+            'FechaSalida' => $this->fechaSalida,
+            'Importe' => $this->importe
+        ];
+    }
+    
+     public static function BuscarPorPatente($patente){
+        if(empty($patente)){
+            return null;
+        }
+
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT  m.ID as id,
+                                                        m.ID_Cochera as idCochera,
+                                                        c.Piso as pisoCochera,
+                                                        c.Numero as numeroCochera,
+                                                        m.ID_Empleado as idEmpleado, 
+                                                        m.Patente as patente,
+                                                        m.Color as color,
+                                                        m.Marca as marca, 
+                                                        m.Fecha_Ingreso as fechaIngreso,
+                                                        NOW() as fechaSalida,
+                                                        HOUR(TIMEDIFF(NOW(),m.Fecha_Ingreso)) as tiempo
+                                                FROM    Movimientos m
+                                                INNER JOIN Cochera c ON m.ID_Cochera = c.ID
+                                                WHERE   Patente =:patente AND Fecha_Salida IS NULL");
+            $consulta->bindValue(":patente", $patente, PDO::PARAM_STR);
+            $consulta->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Cochera");
+            $consulta->execute();
+            if($consulta->rowCount() > 0){
+                return $consulta->fetch();
+            } else{
+                return null;
+            }
         } catch(PDOException $err){
             return null;
         }
     }
-
 
     public static function RetornarCocherasLibres(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
             $consulta = $pdo->RetornarConsulta("SELECT ID, Piso, Numero, Reservada FROM Cochera WHERE Estado = 0 ORDER BY Piso, Numero");
             $consulta->execute();
-            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+            return json_encode(array($consulta->fetchAll(PDO::FETCH_ASSOC)));
             
         } catch(PDOException $err){
-            return "error PDO";
+            return json_encode(AccesoDatos::ErrorMessageDB($err));
         }
     }
     
 }
-
-
 ?>
