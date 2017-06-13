@@ -6,6 +6,7 @@ $server = new nusoap_server();
 
 
 $server->configureWSDL("Web Service del Estacionamiento", "urn:EstacionamientoWSDL");
+// Usado para dar de alta un usuario
 $server->wsdl->addComplexType(
                                 "Usuario",
                                 "complexType",
@@ -20,6 +21,23 @@ $server->wsdl->addComplexType(
                                         "rol" => array('name' => 'rol', 'type' => 'xsd:int')
                                         )
                                 );
+
+// Tipo de dato empleado, usado para devolver datos del usuario y modificar usuarios
+$server->wsdl->addComplexType(
+                                "Empleado",
+                                "complexType",
+                                "struct",
+                                "all",
+                                "",
+                                array(  "id" =>array('name' => 'id', 'type' => 'xsd:string'),
+                                        "nombre" => array('name' => 'nombre', 'type' => 'xsd:string'),
+                                        "apellido" => array('name' => 'apellido', 'type' => 'xsd:string'),
+                                        "dni" => array('name' => 'dni', 'type' => 'xsd:string'),
+                                        "estado" => array('name' => 'estado', 'type' => 'xsd:string'),
+                                        "rol" => array('name' => 'rol', 'type' => 'xsd:string'),
+                                        )
+                                );
+
 $server->wsdl->addComplexType(
                                 "Resultado",
                                 "complexType",
@@ -60,6 +78,26 @@ $server->register('TraerUsuarios',
                     'rpc',
                     'encoded',
                     'Traer una lista con todos los usuarios'
+);
+
+$server->register('TraerUsuario',
+                    array("id" => 'xsd:int'),
+                    array("Empleado" => 'tns:Empleado'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#TraerUsuarioPorID',
+                    'rpc',
+                    'encoded',
+                    'Retorna el usuario segun la id'
+);
+
+$server->register('ModificarUsuario',
+                    array("Empleado" => 'tns:Empleado'),
+                    array("Resultado" => 'xsd:string'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#TraerUsuarioPorID',
+                    'rpc',
+                    'encoded',
+                    'Retorna el usuario segun la id'
 );
 
 $server->register('SuspenderUsuario',
@@ -118,8 +156,15 @@ function Login($usuario, $pass){
 }
 
 function TraerUsuarios(){
-    include_once("usuario.php");
     return Usuario::TraerUsuarios();
+}
+
+function TraerUsuario($id){
+    return Usuario::TraerUsuario($id);
+}
+
+function ModificarUsuario($empleado){
+    return Usuario::ModificarUsuario($empleado);
 }
 
 function SuspenderUsuario($id){

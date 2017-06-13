@@ -27,6 +27,7 @@ if($resultado["Status"] == "error"){
     die();
 }
 ?>
+<div id="divResultado"></div>
 <div class="container" id="divContenido">
 <div class="row" style="background: #EEE">
     <div class="col-lg-12">
@@ -51,16 +52,16 @@ if($resultado["Status"] == "error"){
                                     continue;
                             ?>
                             <tr data-baja="<?php echo $value["Baja"] ?>">
-                                <td>
+                                <td class="apellido">
                                     <?php echo $value["Apellido"];?>
                                 </td>
-                                <td>
+                                <td class="nombre">
                                     <?php echo $value["Nombre"];?>
                                 </td>
-                                <td>
+                                <td class="dni">
                                     <?php echo $value["DNI"];?>
                                 </td>
-                                <td>
+                                <td class="estado">
                                     <?php echo $value["Baja"] == 0?  '<span class="label label-success">Activo' : '<span class="label label-danger">Suspendido';?>
                                     </span>
                                 </td>
@@ -68,13 +69,13 @@ if($resultado["Status"] == "error"){
                                     <?php echo $value["Fecha"];?>
                                 </td>
                                 <td style="width: 20%;">
-                                    <a href="#info" class="table-link" id="infoLink" data-id="<?php echo $value["ID"];?>">
+                                    <a href="#info" class="table-link" id="infoLink">
                                         <span class="fa-stack">
                                             <i class="fa fa-square fa-stack-2x"></i>
                                             <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
                                         </span>
                                     </a>
-                                    <a href="#" class="table-link " id="editLink" data-id="<?php echo $value["ID"];?>">
+                                    <a href="#" class="table-link " id="editLink" onclick="editarUsuario(<?php echo $value["ID"];?>)">
                                         <span class="fa-stack">
                                             <i class="fa fa-square fa-stack-2x"></i>
                                             <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
@@ -99,6 +100,88 @@ if($resultado["Status"] == "error"){
         </div> <!--/ .main-box -->
     </div> <!--/ .col -->
 </div> <!--/ .row -->
-</div>
+
+<div class="modal fade" id="modalUsuario" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" 
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Modal title
+                </h4>
+            </div> <!-- .modal-header -->
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label"
+                                for="nombre">ID</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" 
+                            id="id" placeholder="1" disabled/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label"
+                                for="nombre">Nombre</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" 
+                            id="nombre" placeholder="Nombre"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label"
+                                for="apellido">Apellido</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" 
+                            id="apellido" placeholder="Apellido"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"
+                            for="dni" >DNI</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control"
+                                id="dni" placeholder="35444888"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <select class="form-control" id="estado" name="estado">
+                                <option value="0">Activo</option>
+                                <option value="1">Suspendido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="rol">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <label class="radio-inline"><input type="radio" name="rol" required value="1">Empleado</label>
+                            <label class="radio-inline"><input type="radio" name="rol" required value="2">Administrador</label>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- .modal-body -->
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Cerrar
+                </button>
+                <button type="button" class="btn btn-primary" onclick="updateUsuario()">
+                    Modificar
+                </button>
+            </div><!-- .modal-footer -->
+        </div>
+    </div>
+</div> <!-- .modal -->
+
+</div> <!-- .container -->
 </body>
 </html>

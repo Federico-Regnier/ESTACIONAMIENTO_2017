@@ -11,7 +11,7 @@ $(function(){
     $("#userForm").submit(function(event){
         event.preventDefault();
         $.ajax({
-            url: "administrador.php",
+            url: "adminUsuarios.php",
             data: $("#userForm").serialize(),
             method: "POST",
            dataType: "json" 
@@ -31,7 +31,7 @@ $(function(){
         data.push({name:"Login", value: true});
         
         $.ajax({
-            url: "administrador.php",
+            url: "adminUsuarios.php",
             data: $.param(data),
             method: "POST",
             
@@ -45,38 +45,11 @@ $(function(){
             }
         });
     });
-    
-    $("#divContenido").on('click', "#editLink", function(event){
-        event.preventDefault();
-        var baja = $(this).parent().parent().data("baja");
-        var mensaje;
-        if(baja == 0){
-            var datos = {"Suspender" : true, "id" : $(this).data("id")};
-            mensaje = "Seguro que desea suspender al usuario?";
-        } else{
-            var datos = {"Habilitar" : true, "id" : $(this).data("id")};
-            mensaje = "Seguro que desea habilitar al usuario?";
-        }
-        if(confirm(mensaje)){
-            $.ajax({
-                url: "administrador.php",
-                data: datos,
-                method: 'POST',
-                async: true
-            }).done(function(result){
-                if(result != "error"){
-                    $("#divContenido").load("listadoUsuarios.php #divContenido");
-                } else{
-                    alert("No se pudo suspender el usuario");
-                }
-            });
-        }
-    });
 
     $("#logout").on('click',function(event){
         event.preventDefault();
         $.ajax({
-            url: "administrador.php",
+            url: "adminUsuarios.php",
             data: {"Logout": true},
             method: "GET"
         }).done(function(result){
@@ -85,12 +58,27 @@ $(function(){
             }
         });
     });
+
+    $("#btnAgregarAuto").click(function(){
+        $.ajax({
+            url: 'listadoCocheras.php',
+            method: 'GET',
+        }).done(function(result){
+            var listado = $("#divListado");
+            listado.removeClass();
+            listado.html(result);
+        }).error(function(result){
+            var listado = $("#divListado");
+            listado.addClass("alert alert-danger");
+            listado.html("Error en la comunicacion con el servicio. Intentelo mas tarde.");
+        });
+    });
 });
 
 function Borrar(id){
     if(confirm("Esta seguro que desea eliminar el usuario?")){
         $.ajax({
-            url: "administrador.php",
+            url: "adminUsuarios.php",
             data: {"Borrar": true, "id": id},
             method: 'POST',
             async: true
@@ -102,4 +90,57 @@ function Borrar(id){
             }
         });
     }
+}
+
+function editarUsuario(id){
+    event.preventDefault();
+    $.ajax({
+        url:"adminUsuarios.php",
+        method:'POST',
+        data:{"TraerUsuario": true, "id" : id},
+        async: true,
+        dataType: "json"
+    }).done(function(result){
+        if(result["Status"]!= "error" && result["Resultado"]!= ""){
+            var modal = $("#modalUsuario");
+            var empleado = result["Resultado"];
+
+            $('#id').val(empleado["id"]);
+            $('#nombre').val(empleado["nombre"]);
+            $('#apellido').val(empleado["apellido"]);
+            $('#estado').val(empleado["estado"]);
+            $('#dni').val(empleado["dni"]);
+            var $rol = $('#rol input:radio[name=rol]');
+            $rol.removeAttr("checked");
+            $rol.filter('[value='+empleado["rol"]+']').prop('checked', true);
+            modal.modal('show');
+        }
+    });
+}
+
+function modificarUsuario(id){
+    var usuario = {
+        "id" : $("#id").val(),
+        "nombre" : $('#nombre').val(),
+        "apellido" : $("#apellido").val(),
+        "dni": $("#dni").val(),
+        "estado" : $("#estado").val(),
+        "rol" : $("#rol").val()
+    };
+    $.ajax({
+        url:"adminUsuarios.php",
+        method:"POST",
+        data: usuario,
+        async: true,
+    }).done(function(result){
+        var div = $("#divResultado");
+        div.removeClass();
+        if(resultado == "success"){
+            div.addClass("alert alert-success");
+            div.html("Usuario modificado con exito");
+        } else {
+            div.addClass("alert alert-danger");
+            div.html(result);
+        }
+    });
 }

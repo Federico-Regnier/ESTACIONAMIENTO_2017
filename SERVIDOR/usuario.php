@@ -3,7 +3,7 @@ include_once("AccesoDatos.php");
 
 class Usuario{
     
-    static function AgregarUsuario($usuario){
+    public static function AgregarUsuario($usuario){
         // FIXME: arreglar la fecha
         $status = "error";
         $message = "";
@@ -27,7 +27,7 @@ class Usuario{
         return array("Status" => $status, "Mensaje" => $message);
     }
 
-    static function TraerUsuarios(){
+    public static function TraerUsuarios(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
             $consulta = $pdo->RetornarConsulta("SELECT ID, Apellido, Nombre,  DNI, Usuario, Rol, Fecha, Baja FROM Usuarios  WHERE Baja != 2 ORDER BY Apellido, Nombre");
@@ -38,7 +38,59 @@ class Usuario{
         }
     }
 
-    static function ExisteUsuario($username){
+    public static function TraerUsuario($id){
+        if(empty($id))
+            return array();
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT  ID as id,
+                                                        Nombre as nombre, 
+                                                        Apellido as apellido, 
+                                                        DNI as dni, 
+                                                        Baja as estado, 
+                                                        Rol as rol
+                                                FROM Usuarios 
+                                                WHERE ID =:id");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+            return $resultado ? $resultado : array();
+            
+        } catch(PDOException $err){
+            return array();
+        }
+    }
+
+    public static function ModificarUsuario($usuario){
+        if(!isset($usuario["id"]) || $usuario["id"] <= 0){
+            return "Id invalido";
+        }
+
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("UPDATE Usuarios
+                                                SET Nombre =:nombre, 
+                                                    Apellido =:apellido, 
+                                                    DNI =:dni, 
+                                                    Baja =:estado, 
+                                                    Rol =:rol
+                                                WHERE ID =:id");
+            $consulta->bindValue(":id", $$usuario["id"], PDO::PARAM_INT);
+            $consulta->bindValue(":nombre",$usuario["nombre"], PDO::PARAM_STR);
+            $consulta->bindValue(":apellido",$usuario["apellido"], PDO::PARAM_STR);
+            $consulta->bindValue(":dni",$usuario["dni"], PDO::PARAM_STR);
+            $consulta->bindValue(":estado",$usuario["estado"], PDO::PARAM_STR);
+            $consulta->bindValue(":rol",$usuario["rol"], PDO::PARAM_STR);
+            $consulta->execute();
+            return $consulta->rowCount() > 0 ? "success" : "Error al modificar el usuario";
+            
+        } catch(PDOException $err){
+            return "Error al comunicarse con la base de datos";
+        }
+
+    }
+
+    public static function ExisteUsuario($username){
         if(empty($username))
             die();
         try{
@@ -54,7 +106,7 @@ class Usuario{
         }
     }
 
-    static function Login($username, $pass){
+    public static function Login($username, $pass){
         if(empty($username) || empty($pass)){
             return "Usuario o contrase&ntilde;a incorrectos";
         }
@@ -79,10 +131,9 @@ class Usuario{
         } catch(PDOException $err){
             return array("Error" => $err->getMessage());
         }
-
     }
 
-    static function RegistrarLogin($id){
+    public static function RegistrarLogin($id){
         try{
             $pdo = AccesoDatos::getAccesoDB();
             $consulta = $pdo->RetornarConsulta("INSERT INTO login_usuarios VALUES (:id, NOW())");
@@ -93,7 +144,7 @@ class Usuario{
         }
     }
 
-    static function SuspenderUsuario($id){
+    public static function SuspenderUsuario($id){
         if($id < 1){
             return "error";
         }
@@ -108,7 +159,7 @@ class Usuario{
         }
     }
 
-    static function HabilitarUsuario($id){
+    public static function HabilitarUsuario($id){
         if($id < 1){
             return "error";
         }
@@ -123,7 +174,7 @@ class Usuario{
         }
     }
     
-    static function BorrarUsuario($id){
+    public static function BorrarUsuario($id){
         if($id < 1){
             return "error";
         }

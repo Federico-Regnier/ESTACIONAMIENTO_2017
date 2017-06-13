@@ -44,6 +44,12 @@ if(isset($_POST["Habilitar"])){
     }
 }
 
+if(isset($_POST["TraerUsuario"])){
+    include_once("cliente.php");
+    $resultado = Cliente::Execute('TraerUsuario', array($_POST["id"]));
+    echo json_encode($resultado);
+}
+
 if(isset($_POST["Borrar"])){
     include_once("cliente.php");
     $resultado = Cliente::Execute('BorrarUsuario', array($_POST["id"]));
@@ -81,6 +87,4 @@ if(isset($_POST["Login"])){
         echo $result["Resultado"]["Mensaje"];
     }
 }
-
-
 ?>
