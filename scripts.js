@@ -75,6 +75,7 @@ $(function(){
     });
 });
 
+
 function Borrar(id){
     if(confirm("Esta seguro que desea eliminar el usuario?")){
         $.ajax({
@@ -91,7 +92,7 @@ function Borrar(id){
         });
     }
 }
-
+// Carga el modal con los datos del usuario y lo muestra
 function editarUsuario(id){
     event.preventDefault();
     $.ajax({
@@ -119,7 +120,8 @@ function editarUsuario(id){
 }
 
 function modificarUsuario(id){
-    var usuario = {
+    var datos = {
+        "ModificarUsuario" : true,
         "id" : $("#id").val(),
         "nombre" : $('#nombre').val(),
         "apellido" : $("#apellido").val(),
@@ -130,14 +132,16 @@ function modificarUsuario(id){
     $.ajax({
         url:"adminUsuarios.php",
         method:"POST",
-        data: usuario,
+        data: datos,
         async: true,
     }).done(function(result){
+        $("#modalUsuario").modal('hide');
         var div = $("#divResultado");
         div.removeClass();
         if(resultado == "success"){
             div.addClass("alert alert-success");
             div.html("Usuario modificado con exito");
+            $("#divContenido").load("listadoUsuarios.php #divContenido");
         } else {
             div.addClass("alert alert-danger");
             div.html(result);

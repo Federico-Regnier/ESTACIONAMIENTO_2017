@@ -99,7 +99,8 @@ $server->register('ModificarUsuario',
                     'encoded',
                     'Retorna el usuario segun la id'
 );
-
+/*
+            DEPRECATED
 $server->register('SuspenderUsuario',
                     array("id" => 'xsd:int'),
                     array("Resultado" => 'xsd:string'),
@@ -119,6 +120,7 @@ $server->register('HabilitarUsuario',
                     'encoded',
                     'Habilitar a un usuario'
 );
+*/
 
 $server->register('BorrarUsuario',
                     array("id" => 'xsd:int'),
@@ -167,6 +169,9 @@ function ModificarUsuario($empleado){
     return Usuario::ModificarUsuario($empleado);
 }
 
+/*
+            DEPRECATED
+
 function SuspenderUsuario($id){
     return Usuario::SuspenderUsuario($id);
 }
@@ -174,6 +179,7 @@ function SuspenderUsuario($id){
 function HabilitarUsuario($id){
     return Usuario::HabilitarUsuario($id);
 }
+*/
 
 function BorrarUsuario($id){
     return Usuario::BorrarUsuario($id);

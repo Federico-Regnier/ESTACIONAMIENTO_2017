@@ -21,6 +21,9 @@ if(isset($_POST["usuario"]) && isset($_POST["password"]) && isset($_POST["rol"])
     }
 }
 
+/* 
+    DEPRECATED
+
 if(isset($_POST["Suspender"])){
     include_once("cliente.php");
     $resultado = Cliente::Execute('SuspenderUsuario', array($_POST["id"]));
@@ -43,11 +46,30 @@ if(isset($_POST["Habilitar"])){
         echo $resultado["Resultado"];
     }
 }
+*/
 
 if(isset($_POST["TraerUsuario"])){
     include_once("cliente.php");
     $resultado = Cliente::Execute('TraerUsuario', array($_POST["id"]));
     echo json_encode($resultado);
+}
+
+if(isset($_POST["ModificarUsuario"])){
+    require_once("cliente.php");
+    $usuario = array(
+        "id" => $_POST["id"],
+        "nombre" => isset($_POST["nombre"]),
+        "apellido" => isset($_POST["apellido"]),
+        "dni" => isset($_POST["dni"]),
+        "rol" => $_POST["rol"],
+        "estado" => $_POST["estado"]
+    );
+    $resultado = Cliente::Execute('ModificarUsuario', array("Empleado" => $usuario));
+    if($resultado["Status"] == "error"){
+        echo "No se pudo comunicar con el web service.";
+    } else {
+        echo $resultado["Resultado"];
+    }
 }
 
 if(isset($_POST["Borrar"])){
