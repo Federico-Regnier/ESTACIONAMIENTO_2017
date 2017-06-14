@@ -1,49 +1,52 @@
 <?php
-require_once("../vendor/autoload.php");
-include_once("cochera.php");
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
-$app = new \Slim\Slim();
+require 'vendor/autoload.php';
+require 'clases/cochera.php';
 
-$app->post('/Auto',function()use($app){
-        $app->response->headers->set("Content-type", "application/json");
-        $idUsuario = $app->request->post("ID_Usuario");
-        $idCochera = $app->request->post("ID_Cochera");
-        $patente = $app->request->post("Patente");
-        $color = $app->request->post("Color");
-        $marca = $app->request->post("Marca");
+$config['displayErrorDetails'] = true;
+$config['addContentLengthHeader'] = false;
+
+$app = new \Slim\App(["settings" => $config]);
+
+$app->get('/Cocheras/{estado}', function(Request $request, Response $response){
+    $estado = $request->getAttribute('estado');
+    if($estado == "libres"){
+        $respuesta = Cochera::RetornarCocherasLibres();
+        return $response->withJson($respuesta, 200);
+    } else{
+        return $response->withJson(array(),404);
+    }
+});
+
+$app->get('/Cocheras/{fechaInicio}/{fechaFin}', function(Request $request, Response $response){
+    $fechaIncio = $request->getAttribute('fechaInicio');
+    $fechaFin = $request->getAttribute('fechaFin');
+});
+
+$app->post('/Auto',function(Request $request, Response $response){
+        $arr = $request->getParsedBody();
+        $idUsuario = $arr["ID_Usuario"];
+        $idCochera = $arr["ID_Cochera"];
+        $patente = $arr["Patente"];
+        $color = $arr["Color"];
+        $marca = $arr["Marca"];
         
 
         $cochera = new Cochera($idUsuario, $idCochera, $patente, $color, $marca);
         $resultado = $cochera->AgregarAuto();
-        $app->response->status(200);
-        $app->response->body($resultado);
+        $response->withJson($resultado, 200);
 });
 
-$app->put('/Auto',function()use($app){
-    $app->response->headers->set("Content-type", "application/json");
-    $patente = $app->request->put("Patente");
+$app->put('/Auto/{patente}',function(Request $request, Response $response){
+    $patente = $request->getAttribute('patente');
     $cochera = Cochera::BuscarPorPatente($patente);
     if($cochera == null){
-        $resultado = json_encode(array("Status" => "error", "Mensaje" => "Patente incorrecta"));
-    } else{
-        $resultado = $cochera->SacarAuto();
-    }
-
-    $app->response->status(200);
-    $app->response->body($resultado);
-    
+        return $response->withJson(array(), 404);
+    } 
+    $resultado = $cochera->SacarAuto();
+    return $response->withJson($resultado, 200);
 });
-
-$app->get('/Cocheras/:estado',function($estado)use($app){
-    $app->response->headers->set("Content-type", "application/json");
-    if($estado == "libres"){
-        $respuesta = Cochera::RetornarCocherasLibres();
-        $app->response->status(200);
-        $app->response->body($respuesta);
-    } else{
-        $app->response->status(404);
-    }
-});
-
 
 $app->run();

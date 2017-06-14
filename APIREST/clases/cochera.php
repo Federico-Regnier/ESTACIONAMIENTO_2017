@@ -36,11 +36,11 @@ class Cochera implements JsonSerializable{
 
             if($consulta->rowCount() > 0){
                 $resultado = $this->OcuparCochera() ? array("Status" => "success") : AccesoDatos::ErrorMessageDB();
-                return json_encode($resultado);
+                return $resultado;
             }
-            return json_encode(AccesoDatos::ErrorMessageDB());
+            return AccesoDatos::ErrorMessageDB();
         } catch(PDOException $err){
-            return json_encode(AccesoDatos::ErrorMessageDB($err));
+            return AccesoDatos::ErrorMessageDB($err);
         }
         
     } 
@@ -51,10 +51,10 @@ class Cochera implements JsonSerializable{
             $this->UpdateMovimiento();
             
             $resultado = $this->DesocuparCochera() ? $this : array("Status" => "error", "Mensaje" =>"Error al liberar la cochera.");
-            return json_encode($resultado);
+            return $resultado;
 
         } catch(PDOException $err){
-            return json_encode(AccesoDatos::ErrorMessageDB($err));
+            return AccesoDatos::ErrorMessageDB($err);
         }
     }
 
@@ -111,7 +111,7 @@ class Cochera implements JsonSerializable{
             return $consulta->rowCount() > 0 ? "success" : "error";
             
         } catch(PDOException $err){
-            return json_encode(AccesoDatos::ErrorMessageDB($err));
+            return AccesoDatos::ErrorMessageDB($err);
         }
     }
 
@@ -167,7 +167,38 @@ class Cochera implements JsonSerializable{
     public static function RetornarCocherasLibres(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT ID, Piso, Numero, Reservada FROM Cochera WHERE Estado = 0 ORDER BY Piso, Numero");
+            $consulta = $pdo->RetornarConsulta("SELECT ID, Piso, Numero, Reservada 
+                                                FROM Cochera 
+                                                WHERE Estado = 0 
+                                                ORDER BY Piso, Numero");
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch(PDOException $err){
+            return AccesoDatos::ErrorMessageDB($err);
+        }
+    }
+
+    public static function RetornarCocherasUsadas($fechaInicio, $fechaFin){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT m.Patente as patente,
+                                                       m.Color as color,
+                                                       m.Marca as marca,
+                                                       m.Fecha_Ingreso as fechaIngreso,
+                                                       m.Fecha_Salida as fechaSalida,
+                                                       m.Importe as importe,
+                                                       c.Piso as pisoCochera,
+                                                       c.Numero as numeroCochera,
+                                                       e.Nombre as nombreEmpleado,
+                                                       e.Apellido as apellidoEmpleado 
+                                                FROM Movimientos m
+                                                ORDER BY Fecha_Ingreso
+                                                INNER JOIN Cochera c ON m.ID_Cochera = c.ID,
+                                                INNER JOIN Usuario e ON m.ID_Empleado = e.ID
+                                                WHERE Fecha_Ingreso >=:fechaInicio AND Fecha_Salida <=:fechaFin");
+            $consulta->bindValue(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
+            $consulta->bindValue(':fechaFin', $fechaInicio, PDO::PARAM_STR);
             $consulta->execute();
             return array($consulta->fetchAll(PDO::FETCH_ASSOC));
             

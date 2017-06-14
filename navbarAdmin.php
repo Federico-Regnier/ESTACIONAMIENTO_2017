@@ -13,7 +13,7 @@
     <div class="navbar-collapse collapse" id="navigationbar">
         <ul class="nav navbar-nav" id="navbar">
             <li class=""><a href="main.php">Home</a></li>
-            <li><a href="index.php" id="">Autos</a></li>
+            <li><a href="agregarAuto.php" id="">Autos</a></li>
             <li><a href="estadisticas.php">Estadisticas</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Empleados <span class="caret"></span></a>
