@@ -29,12 +29,12 @@ $server->wsdl->addComplexType(
                                 "struct",
                                 "all",
                                 "",
-                                array(  "id" =>array('name' => 'id', 'type' => 'xsd:string'),
+                                array(  "id" => array('name' => 'id', 'type' => 'xsd:int'),
                                         "nombre" => array('name' => 'nombre', 'type' => 'xsd:string'),
                                         "apellido" => array('name' => 'apellido', 'type' => 'xsd:string'),
                                         "dni" => array('name' => 'dni', 'type' => 'xsd:string'),
-                                        "estado" => array('name' => 'estado', 'type' => 'xsd:string'),
-                                        "rol" => array('name' => 'rol', 'type' => 'xsd:string'),
+                                        "estado" => array('name' => 'estado', 'type' => 'xsd:int'),
+                                        "rol" => array('name' => 'rol', 'type' => 'xsd:int')
                                         )
                                 );
 
@@ -91,36 +91,14 @@ $server->register('TraerUsuario',
 );
 
 $server->register('ModificarUsuario',
-                    array("Empleado" => 'tns:Empleado'),
+                    array("empleado" => 'tns:Empleado'),
                     array("Resultado" => 'xsd:string'),
                     'urn:EstacionamientoWSDL',
-                    'urn:EstacionamientoWSDL#TraerUsuarioPorID',
+                    'urn:EstacionamientoWSDL#ModificarUsuario',
                     'rpc',
                     'encoded',
-                    'Retorna el usuario segun la id'
+                    'Modifica un usuario segun su id'
 );
-/*
-            DEPRECATED
-$server->register('SuspenderUsuario',
-                    array("id" => 'xsd:int'),
-                    array("Resultado" => 'xsd:string'),
-                    'urn:EstacionamientoWSDL',
-                    'urn:EstacionamientoWSDL#SuspenderUsuario',
-                    'rpc',
-                    'encoded',
-                    'Suspender a un usuario'
-);
-
-$server->register('HabilitarUsuario',
-                    array("id" => 'xsd:int'),
-                    array("Resultado" => 'xsd:string'),
-                    'urn:EstacionamientoWSDL',
-                    'urn:EstacionamientoWSDL#HabilitarUsuario',
-                    'rpc',
-                    'encoded',
-                    'Habilitar a un usuario'
-);
-*/
 
 $server->register('BorrarUsuario',
                     array("id" => 'xsd:int'),
@@ -168,18 +146,6 @@ function TraerUsuario($id){
 function ModificarUsuario($empleado){
     return Usuario::ModificarUsuario($empleado);
 }
-
-/*
-            DEPRECATED
-
-function SuspenderUsuario($id){
-    return Usuario::SuspenderUsuario($id);
-}
-
-function HabilitarUsuario($id){
-    return Usuario::HabilitarUsuario($id);
-}
-*/
 
 function BorrarUsuario($id){
     return Usuario::BorrarUsuario($id);

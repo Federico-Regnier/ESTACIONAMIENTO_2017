@@ -27,8 +27,9 @@ if($resultado["Status"] == "error"){
     die();
 }
 ?>
-<div id="divResultado"></div>
-<div class="container" id="divContenido">
+
+<div class="container" id="contenedor">
+<div id="divContenido">
 <div class="row" style="background: #EEE">
     <div class="col-lg-12">
         <div class="main-box no-header clearfix">
@@ -52,16 +53,16 @@ if($resultado["Status"] == "error"){
                                     continue;
                             ?>
                             <tr data-baja="<?php echo $value["Baja"] ?>">
-                                <td class="apellido">
+                                <td>
                                     <?php echo $value["Apellido"];?>
                                 </td>
-                                <td class="nombre">
+                                <td>
                                     <?php echo $value["Nombre"];?>
                                 </td>
-                                <td class="dni">
+                                <td>
                                     <?php echo $value["DNI"];?>
                                 </td>
-                                <td class="estado">
+                                <td>
                                     <?php echo $value["Baja"] == 0?  '<span class="label label-success">Activo' : '<span class="label label-danger">Suspendido';?>
                                     </span>
                                 </td>
@@ -69,7 +70,7 @@ if($resultado["Status"] == "error"){
                                     <?php echo $value["Fecha"];?>
                                 </td>
                                 <td style="width: 20%;">
-                                    <a href="#info" class="table-link" id="infoLink">
+                                    <a href="#info" class="table-link" id="infoLink" onclick="datosUsuario(<?php echo $value["ID"];?>)">
                                         <span class="fa-stack">
                                             <i class="fa fa-square fa-stack-2x"></i>
                                             <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>
@@ -100,7 +101,8 @@ if($resultado["Status"] == "error"){
         </div> <!--/ .main-box -->
     </div> <!--/ .col -->
 </div> <!--/ .row -->
-
+</div>
+</div> <!-- .container -->
 <div class="modal fade" id="modalUsuario" tabindex="-1" role="dialog" 
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -113,7 +115,7 @@ if($resultado["Status"] == "error"){
                        <span class="sr-only">Close</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    Modal title
+                    Modificar Datos del Empleado
                 </h4>
             </div> <!-- .modal-header -->
             
@@ -174,14 +176,12 @@ if($resultado["Status"] == "error"){
                         data-dismiss="modal">
                             Cerrar
                 </button>
-                <button type="button" class="btn btn-primary" onclick="updateUsuario()">
+                <button type="button" class="btn btn-primary" onclick="modificarUsuario()">
                     Modificar
                 </button>
             </div><!-- .modal-footer -->
         </div>
     </div>
 </div> <!-- .modal -->
-
-</div> <!-- .container -->
 </body>
 </html>

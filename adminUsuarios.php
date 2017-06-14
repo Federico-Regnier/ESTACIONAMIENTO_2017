@@ -21,33 +21,6 @@ if(isset($_POST["usuario"]) && isset($_POST["password"]) && isset($_POST["rol"])
     }
 }
 
-/* 
-    DEPRECATED
-
-if(isset($_POST["Suspender"])){
-    include_once("cliente.php");
-    $resultado = Cliente::Execute('SuspenderUsuario', array($_POST["id"]));
-    if($resultado["Status"] == 'success'){
-        echo $resultado["Resultado"];
-    } else{
-        echo "Error al comunicarse con el web service";
-        echo $resultado["Resultado"];
-    }
-
-}
-
-if(isset($_POST["Habilitar"])){
-    include_once("cliente.php");
-    $resultado = Cliente::Execute('HabilitarUsuario', array($_POST["id"]));
-    if($resultado["Status"] == 'success'){
-        echo $resultado["Resultado"];
-    } else{
-        echo "Error al comunicarse con el web service";
-        echo $resultado["Resultado"];
-    }
-}
-*/
-
 if(isset($_POST["TraerUsuario"])){
     include_once("cliente.php");
     $resultado = Cliente::Execute('TraerUsuario', array($_POST["id"]));
@@ -58,9 +31,9 @@ if(isset($_POST["ModificarUsuario"])){
     require_once("cliente.php");
     $usuario = array(
         "id" => $_POST["id"],
-        "nombre" => isset($_POST["nombre"]),
-        "apellido" => isset($_POST["apellido"]),
-        "dni" => isset($_POST["dni"]),
+        "nombre" => $_POST["nombre"],
+        "apellido" => $_POST["apellido"],
+        "dni" => $_POST["dni"],
         "rol" => $_POST["rol"],
         "estado" => $_POST["estado"]
     );

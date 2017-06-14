@@ -127,8 +127,9 @@ function modificarUsuario(id){
         "apellido" : $("#apellido").val(),
         "dni": $("#dni").val(),
         "estado" : $("#estado").val(),
-        "rol" : $("#rol").val()
+        "rol" : $("#rol input:checked").val()
     };
+    //alert(JSON.stringify(datos));
     $.ajax({
         url:"adminUsuarios.php",
         method:"POST",
@@ -136,15 +137,23 @@ function modificarUsuario(id){
         async: true,
     }).done(function(result){
         $("#modalUsuario").modal('hide');
+        if(!$("#divResultado").length){
+            $("#contenedor").prepend('<div id="divResultado" class="alert alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><p></p></div>');
+        }
         var div = $("#divResultado");
-        div.removeClass();
-        if(resultado == "success"){
-            div.addClass("alert alert-success");
-            div.html("Usuario modificado con exito");
+        if(result == "success"){
+            div.removeClass("alert-danger");
+            div.addClass("alert-success");
+            div.find('p').html("Usuario modificado con exito");
             $("#divContenido").load("listadoUsuarios.php #divContenido");
         } else {
-            div.addClass("alert alert-danger");
-            div.html(result);
+            div.removeClass("alert-success");
+            div.addClass("alert-danger");
+            div.find('p').html(result);
         }
     });
+}
+
+function datosUsuario(id){
+    alert("Not implemented yet");
 }

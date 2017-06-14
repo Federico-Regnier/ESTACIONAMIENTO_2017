@@ -63,7 +63,7 @@ class Usuario{
 
     public static function ModificarUsuario($usuario){
         if(!isset($usuario["id"]) || $usuario["id"] <= 0){
-            return "Id invalido";
+            return json_encode($usuario);
         }
 
         try{
@@ -75,7 +75,7 @@ class Usuario{
                                                     Baja =:estado, 
                                                     Rol =:rol
                                                 WHERE ID =:id");
-            $consulta->bindValue(":id", $$usuario["id"], PDO::PARAM_INT);
+            $consulta->bindValue(":id", $usuario["id"], PDO::PARAM_INT);
             $consulta->bindValue(":nombre",$usuario["nombre"], PDO::PARAM_STR);
             $consulta->bindValue(":apellido",$usuario["apellido"], PDO::PARAM_STR);
             $consulta->bindValue(":dni",$usuario["dni"], PDO::PARAM_STR);
