@@ -13,8 +13,9 @@ include_once("checkSesionAdmin.php");
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
-    <script src="scripts.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+    <script src="estadisticas.js"></script>
     <?php include("navbarAdmin.php");?>
     <style>
         label{
@@ -26,7 +27,7 @@ include_once("checkSesionAdmin.php");
 <body>
     <div class="container">
         <div>
-            <form class="form-inline" role="form">
+            <form class="form-inline" role="form" id="formEstadisticas">
                 <div class="form-group">
                     <label for="fechaInicio">Desde</label>
                     <input type="date" class="form-control" id="fechaInicio">
@@ -35,11 +36,36 @@ include_once("checkSesionAdmin.php");
                     <label for="fechaFinal" >Hasta</label>
                     <input class="form-control" type="date" id="fechaFinal">    
                 </div>
-                <button type="button" class="btn btn-primary" onclick="traerEstadisticas()">Buscar</button>
+                <button type="button" class="btn btn-primary" onclick="TraerEstadisticas()">Buscar</button>
             </form>
         </div>
-        
-        <div id="divContenido"></div>
+        <div id="divResultado" hidden>
+            <div class="table-responsive" style="padding-top:10px;">
+                <table class="table table-bordered" id="tablaEstadisticas">
+                    <thead>
+                        <tr>
+                            <th colspan="2" scope="colgroup" class="text-center">Cochera</th>
+                            <th colspan="3" scope="colgroup" class="text-center">Auto</th>
+                            <th colspan="2" scope="colgroup" class="text-center">Empleado</th>
+                            <th colspan="2" scope="colgroup" class="text-center">Fecha</th>
+                            <th rowspan="2" class="text-center" style="padding-bottom: 5%;">Importe</th>
+                        </tr>
+                        <tr>
+                            <th>Piso</th>
+                            <th>Numero</th>
+                            <th>Patente</th>
+                            <th>Marca</th>
+                            <th>Color</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Fecha Ingreso</th>
+                            <th>Fecha Salida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+        </div>
     </div>
 </body>
 </html>

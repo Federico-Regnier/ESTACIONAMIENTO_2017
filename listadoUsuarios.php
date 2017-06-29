@@ -49,6 +49,7 @@ if($resultado["Status"] == "error"){
                         <tbody>
                             <?php
                             foreach ($resultado["Resultado"] as $value) {
+                                // Saltear el usuario que esta logueado
                                 if($value["ID"] == $_SESSION["ID"])
                                     continue;
                             ?>
@@ -70,7 +71,7 @@ if($resultado["Status"] == "error"){
                                     <?php echo $value["Fecha"];?>
                                 </td>
                                 <td style="width: 20%;">
-                                    <a href="#info" class="table-link" id="infoLink" onclick="datosUsuario(<?php echo $value["ID"];?>)">
+                                    <a href="infoEmpleado.php?id=<?php echo $value["ID"];?>" class="table-link" id="infoLink">
                                         <span class="fa-stack">
                                             <i class="fa fa-square fa-stack-2x"></i>
                                             <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>

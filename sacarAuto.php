@@ -30,27 +30,19 @@ include_once("checkSesion.php");
 </head>
 <body>
     <div class="container-fluid">
-        <div class="col-sm-offset-4 col-sm-4" id="divResultado" >
-        </div>
-        <div class="well col-sm-offset-4 col-sm-4">
-            <form action="#">
-                <div>
-                    <label for="patente">Patente</label>
-                    <input type="text" class="form-control" id="patente"/>
+        <div id="divResultado" hidden></div>
+        <div class="well col-xs-offset-0 col-sm-offset-4 col-lg-offset-4 col-sm-5 col-xs-8 col-lg-3" id="divSacarAuto">
+            <form action="#" class="form-inline" id="formSacarAuto">
+                <div class="row">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="patente" placeholder="Patente"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" id="btnSacarAuto" onclick="SacarAuto()">Sacar Auto</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="color">Color</label>
-                    <input type="text" class="form-control" id="color"/>
-                </div>
-                <div class="form-group">
-                    <label for="marca">Marca</label>
-                    <input type="text" class="form-control" id="marca"/>
-                </div>
-                <button type="button" class="btn btn-primary" data-user="<?php echo $_SESSION["ID"]; ?>" id="btnIngresarAuto" onclick="TraerCocherasLibres()">Ingresar Auto</button>
             </form>
         </div>
-        
     </div>
-    <div id="divListado" class="well col-sm-offset-1 col-sm-10" hidden></div>
 </body>
 </html>

@@ -39,6 +39,7 @@ class AccesoDatos
                     "Mensaje" => "Error al acceder a la base de datos. Intentelo mas tarde.", 
                     "innerMessage" => $err != null? $err->getMessage() : "");
     }
+    
     // Evita que el objeto se pueda clonar
     public function __clone()
     {

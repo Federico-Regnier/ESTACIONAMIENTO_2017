@@ -21,29 +21,33 @@ $app->get('/Cocheras/{estado}', function(Request $request, Response $response){
 });
 
 $app->get('/Cocheras/{fechaInicio}/{fechaFin}', function(Request $request, Response $response){
-    $fechaIncio = $request->getAttribute('fechaInicio');
+    $fechaInicio = $request->getAttribute('fechaInicio');
     $fechaFin = $request->getAttribute('fechaFin');
+    $inicio = DateTime::createFromFormat('Y-m-d H:i:s', $fechaInicio.' 00:00:00');
+    $fin = DateTime::createFromFormat('Y-m-d H:i:s', $fechaFin.' 23:59:59');
+    
+    return $response->withJson(Cochera::RetornarCocherasUsadas($inicio->format('Y-m-d H:i:s'), $fin->format('Y-m-d H:i:s')), 200);
 });
 
-$app->post('/Auto',function(Request $request, Response $response){
+$app->post('/Auto', function(Request $request, Response $response){
         $arr = $request->getParsedBody();
-        $idUsuario = $arr["ID_Usuario"];
-        $idCochera = $arr["ID_Cochera"];
-        $patente = $arr["Patente"];
-        $color = $arr["Color"];
-        $marca = $arr["Marca"];
+        $idUsuario = $arr["idUsuario"];
+        $idCochera = $arr["idCochera"];
+        $patente = str_replace(" ", "", $arr["patente"]);
+        $color = $arr["color"];
+        $marca = $arr["marca"];
         
 
         $cochera = new Cochera($idUsuario, $idCochera, $patente, $color, $marca);
         $resultado = $cochera->AgregarAuto();
-        $response->withJson($resultado, 200);
+        return $response->withJson($resultado, 200);
 });
 
 $app->put('/Auto/{patente}',function(Request $request, Response $response){
     $patente = $request->getAttribute('patente');
     $cochera = Cochera::BuscarPorPatente($patente);
     if($cochera == null){
-        return $response->withJson(array(), 404);
+        return $response->withJson(array(), 200);
     } 
     $resultado = $cochera->SacarAuto();
     return $response->withJson($resultado, 200);

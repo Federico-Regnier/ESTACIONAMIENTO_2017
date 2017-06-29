@@ -6,7 +6,8 @@ $server = new nusoap_server();
 
 
 $server->configureWSDL("Web Service del Estacionamiento", "urn:EstacionamientoWSDL");
-// Usado para dar de alta un usuario
+
+// Tipo de dato usuario, usado para dar de alta un usuario
 $server->wsdl->addComplexType(
                                 "Usuario",
                                 "complexType",
@@ -60,6 +61,7 @@ $server->register('AgregarUsuario',
                    'Agregar un usuario'
                     );
 
+// Retorna el id y el rol si el usuario y la pass son correctos
 $server->register('Login',
                     array("usuario" => 'xsd:string', "pass" => 'xsd:string'),
                     array("Resultado" => 'xsd:Array'),
@@ -110,6 +112,16 @@ $server->register('BorrarUsuario',
                     'Borra un usuario'
 );
 
+$server->register('DatosLoginUsuario',
+                    array('id' => 'xsd:int'),
+                    array("Resultado" => 'xsd:Array'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#DatosLogin',
+                    'rpc',
+                    'encoded',
+                    'Trae una lista con las fechas de login del usuario'
+);
+
 
 function AgregarUsuario($usuario){
     $usuario["usuario"] = trim($usuario["usuario"]);
@@ -149,6 +161,10 @@ function ModificarUsuario($empleado){
 
 function BorrarUsuario($id){
     return Usuario::BorrarUsuario($id);
+}
+
+function DatosLoginUsuario($id){
+    return Usuario::DatosLoginUsuario($id);
 }
 
 $HTTP_RAW_POST_DATA = file_get_contents("php://input");

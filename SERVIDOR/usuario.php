@@ -4,7 +4,6 @@ include_once("AccesoDatos.php");
 class Usuario{
     
     public static function AgregarUsuario($usuario){
-        // FIXME: arreglar la fecha
         $status = "error";
         $message = "";
         try{
@@ -186,6 +185,23 @@ class Usuario{
             return $consulta->rowCount() > 0? "success" : "error";
         } catch(PDOException $err){
             return "error";
+        }
+    }
+
+    public static function DatosLoginUsuario($id){
+        if($id < 1){
+            return array();
+        }
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT Fecha 
+                                                FROM login_usuarios
+                                                WHERE ID_Usuario =:id");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->execute();
+            return $consulta->fetchall(PDO::FETCH_ASSOC);
+        } catch(PDOException $err){
+            return array();
         }
     }
 }

@@ -35,7 +35,7 @@ class Cochera implements JsonSerializable{
             $consulta->execute();
 
             if($consulta->rowCount() > 0){
-                $resultado = $this->OcuparCochera() ? array("Status" => "success") : AccesoDatos::ErrorMessageDB();
+                $resultado = $this->OcuparCochera() ? "success" : AccesoDatos::ErrorMessageDB();
                 return $resultado;
             }
             return AccesoDatos::ErrorMessageDB();
@@ -50,7 +50,7 @@ class Cochera implements JsonSerializable{
             $this->CalcularImporte();
             $this->UpdateMovimiento();
             
-            $resultado = $this->DesocuparCochera() ? $this : array("Status" => "error", "Mensaje" =>"Error al liberar la cochera.");
+            $resultado = $this->DesocuparCochera() ? $this : array();
             return $resultado;
 
         } catch(PDOException $err){
@@ -117,8 +117,7 @@ class Cochera implements JsonSerializable{
 
     public function jsonSerialize()
     {
-        //$vars = get_object_vars($this);
-        return [
+        return array(
             'Piso' => $this->pisoCochera,
             'Numero' => $this->numeroCochera,
             'Patente' => $this->patente, 
@@ -127,14 +126,13 @@ class Cochera implements JsonSerializable{
             'FechaIngreso' => $this->fechaIngreso,
             'FechaSalida' => $this->fechaSalida,
             'Importe' => $this->importe
-        ];
+        );
     }
     
      public static function BuscarPorPatente($patente){
         if(empty($patente)){
             return null;
         }
-
         try{
             $pdo = AccesoDatos::getAccesoDB();
             $consulta = $pdo->RetornarConsulta("SELECT  m.ID as id,
@@ -182,25 +180,25 @@ class Cochera implements JsonSerializable{
     public static function RetornarCocherasUsadas($fechaInicio, $fechaFin){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT m.Patente as patente,
-                                                       m.Color as color,
-                                                       m.Marca as marca,
-                                                       m.Fecha_Ingreso as fechaIngreso,
-                                                       m.Fecha_Salida as fechaSalida,
-                                                       m.Importe as importe,
-                                                       c.Piso as pisoCochera,
-                                                       c.Numero as numeroCochera,
-                                                       e.Nombre as nombreEmpleado,
-                                                       e.Apellido as apellidoEmpleado 
+            $consulta = $pdo->RetornarConsulta("SELECT m.Patente,
+                                                       m.Color,
+                                                       m.Marca,
+                                                       m.Fecha_Ingreso,
+                                                       m.Fecha_Salida,
+                                                       m.Importe,
+                                                       c.Piso,
+                                                       c.Numero,
+                                                       e.Nombre,
+                                                       e.Apellido 
                                                 FROM Movimientos m
-                                                ORDER BY Fecha_Ingreso
-                                                INNER JOIN Cochera c ON m.ID_Cochera = c.ID,
-                                                INNER JOIN Usuario e ON m.ID_Empleado = e.ID
-                                                WHERE Fecha_Ingreso >=:fechaInicio AND Fecha_Salida <=:fechaFin");
+                                                INNER JOIN Cochera c ON m.ID_Cochera = c.ID
+                                                INNER JOIN Usuarios e ON m.ID_Empleado = e.ID
+                                                WHERE Fecha_Ingreso >= :fechaInicio AND Fecha_Salida <= :fechaFin
+                                                ORDER BY Fecha_Ingreso");
             $consulta->bindValue(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
-            $consulta->bindValue(':fechaFin', $fechaInicio, PDO::PARAM_STR);
+            $consulta->bindValue(':fechaFin', $fechaFin, PDO::PARAM_STR);
             $consulta->execute();
-            return array($consulta->fetchAll(PDO::FETCH_ASSOC));
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
             
         } catch(PDOException $err){
             return AccesoDatos::ErrorMessageDB($err);

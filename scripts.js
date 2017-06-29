@@ -1,5 +1,5 @@
 $(function(){
-    
+    // Para el highlight de la navbar
     var url = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
     $('#navbar li.active').removeClass('active');
     $("#navbar a").each(function(){
@@ -58,24 +58,9 @@ $(function(){
             }
         });
     });
-
-    $("#btnAgregarAuto").click(function(){
-        $.ajax({
-            url: 'listadoCocheras.php',
-            method: 'GET',
-        }).done(function(result){
-            var listado = $("#divListado");
-            listado.removeClass();
-            listado.html(result);
-        }).error(function(result){
-            var listado = $("#divListado");
-            listado.addClass("alert alert-danger");
-            listado.html("Error en la comunicacion con el servicio. Intentelo mas tarde.");
-        });
-    });
 });
 
-
+// Borra el usuario pasado por id
 function Borrar(id){
     if(confirm("Esta seguro que desea eliminar el usuario?")){
         $.ajax({
@@ -92,6 +77,7 @@ function Borrar(id){
         });
     }
 }
+
 // Carga el modal con los datos del usuario y lo muestra
 function editarUsuario(id){
     event.preventDefault();
@@ -119,6 +105,7 @@ function editarUsuario(id){
     });
 }
 
+// Modifica el usuario con los datos pasados en el modal
 function modificarUsuario(id){
     var datos = {
         "ModificarUsuario" : true,
@@ -129,7 +116,6 @@ function modificarUsuario(id){
         "estado" : $("#estado").val(),
         "rol" : $("#rol input:checked").val()
     };
-    //alert(JSON.stringify(datos));
     $.ajax({
         url:"adminUsuarios.php",
         method:"POST",
@@ -152,8 +138,4 @@ function modificarUsuario(id){
             div.find('p').html(result);
         }
     });
-}
-
-function datosUsuario(id){
-    alert("Not implemented yet");
 }

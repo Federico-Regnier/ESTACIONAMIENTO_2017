@@ -1,33 +1,11 @@
 <?php
-require_once("cliente.php");
-include_once("SERVIDOR/usuario.php");
-    $usuario = array(
-        "id" => 1,
-        "nombre" => "Alberto",
-        "apellido" => "Rodriguez",
-        "dni" => "11",
-        "estado" => 0,
-        "rol" => 1
-    );
-    
-    $resultado = Cliente::Execute('ModificarUsuario', array("Empleado" => $usuario));
-    if($resultado["Status"] == "error"){
-        echo "No se pudo comunicar con el web service.";
-        echo $resultado["Resultado"];
-    } else {
-        echo $resultado["Resultado"];
-    }
-    
-?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
-    </head>
-    <body>
-        
-    </body>
-    </html>
+require_once("APIREST/clases/cochera.php");
+
+$fechaInicio = "2017-2-6";
+$fechaFin = "2017-6-30";
+$inicio = DateTime::createFromFormat('Y-m-d H:i:s', $fechaInicio.' 00:00:00');
+$fin = DateTime::createFromFormat('Y-m-d H:i:s', $fechaFin.' 23:59:59');
+echo $inicio->format('Y-m-d H:i:s')."<br>";
+echo $fin->format('Y-m-d H:i:s')."<br>";
+$resultado = Cochera::RetornarCocherasUsadas($inicio->format('Y-m-d H:i:s'), $fin->format('Y-m-d H:i:s'));
+var_dump($resultado);
