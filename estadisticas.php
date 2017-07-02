@@ -7,11 +7,8 @@ include_once("checkSesionAdmin.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
@@ -46,7 +43,6 @@ include_once("checkSesionAdmin.php");
                         <tr>
                             <th colspan="2" scope="colgroup" class="text-center">Cochera</th>
                             <th colspan="3" scope="colgroup" class="text-center">Auto</th>
-                            <th colspan="2" scope="colgroup" class="text-center">Empleado</th>
                             <th colspan="2" scope="colgroup" class="text-center">Fecha</th>
                             <th rowspan="2" class="text-center" style="padding-bottom: 5%;">Importe</th>
                         </tr>
@@ -56,8 +52,6 @@ include_once("checkSesionAdmin.php");
                             <th>Patente</th>
                             <th>Marca</th>
                             <th>Color</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
                             <th>Fecha Ingreso</th>
                             <th>Fecha Salida</th>
                         </tr>
@@ -65,6 +59,8 @@ include_once("checkSesionAdmin.php");
                     <tbody>
                     </tbody>
                 </table>
+            </div>
+            <div id="estadisticasCocheras"></div>
         </div>
     </div>
 </body>

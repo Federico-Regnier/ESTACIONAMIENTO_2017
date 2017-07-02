@@ -73,7 +73,7 @@ function TraerCocherasLibres(){
                 cuerpoTabla += '<td>'+result[i]["Piso"]+'</td>';
                 cuerpoTabla += '<td>'+result[i]["Numero"]+'</td>';
                 cuerpoTabla += '<td>';
-                if(result[i]["Reservada"])
+                if(result[i]["Reservada"] == 1)
                     cuerpoTabla += 'Si</td>';
                 else
                     cuerpoTabla += 'No</td>';

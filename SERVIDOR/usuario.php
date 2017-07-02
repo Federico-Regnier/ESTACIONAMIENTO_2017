@@ -43,6 +43,7 @@ class Usuario{
         try{
             $pdo = AccesoDatos::getAccesoDB();
             $consulta = $pdo->RetornarConsulta("SELECT  ID as id,
+                                                        Usuario as usuario,
                                                         Nombre as nombre, 
                                                         Apellido as apellido, 
                                                         DNI as dni, 

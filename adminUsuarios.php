@@ -71,6 +71,7 @@ if(isset($_POST["Login"])){
     $result = Cliente::Execute("Login", $user);
     if($result["Status"] == "error"){
         echo "No se pudo ingresar al servicio. Intentelo mas tarde.";
+        die();
     }
 
     if(isset($result["Resultado"]["ID"])){
@@ -78,7 +79,7 @@ if(isset($_POST["Login"])){
         $_SESSION["ID"] = $result["Resultado"]["ID"];
         $_SESSION["Rol"] = $result["Resultado"]["Rol"];
         echo "success";
-    }else{
+    } else {
         echo $result["Resultado"]["Mensaje"];
     }
 }

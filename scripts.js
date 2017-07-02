@@ -93,6 +93,7 @@ function editarUsuario(id){
             var empleado = result["Resultado"];
 
             $('#id').val(empleado["id"]);
+            $("#usuario").val(empleado["usuario"]);
             $('#nombre').val(empleado["nombre"]);
             $('#apellido').val(empleado["apellido"]);
             $('#estado').val(empleado["estado"]);

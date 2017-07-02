@@ -29,6 +29,15 @@ $app->get('/Cocheras/{fechaInicio}/{fechaFin}', function(Request $request, Respo
     return $response->withJson(Cochera::RetornarCocherasUsadas($inicio->format('Y-m-d H:i:s'), $fin->format('Y-m-d H:i:s')), 200);
 });
 
+$app->get('/Estadisticas/{fechaInicio}/{fechaFin}', function(Request $request, Response $response){
+    $fechaInicio = $request->getAttribute('fechaInicio');
+    $fechaFin = $request->getAttribute('fechaFin');
+    $inicio = DateTime::createFromFormat('Y-m-d H:i:s', $fechaInicio.' 00:00:00');
+    $fin = DateTime::createFromFormat('Y-m-d H:i:s', $fechaFin.' 23:59:59');
+    
+    return $response->withJson(Cochera::EstadisticasCochera($inicio->format('Y-m-d H:i:s'), $fin->format('Y-m-d H:i:s')), 200);
+});
+
 $app->post('/Auto', function(Request $request, Response $response){
         $arr = $request->getParsedBody();
         $idUsuario = $arr["idUsuario"];

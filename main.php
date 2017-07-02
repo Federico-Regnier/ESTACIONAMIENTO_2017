@@ -20,7 +20,7 @@ include_once("checkSesionAdmin.php");
 </head>
 <body>
     <div class="container" id="divContenido">
-        
+        <img class="img-responsive" src="parkinglot.jpg" style="max-height: 850px;"/>
     </div>
 </body>
 </html>

@@ -31,6 +31,7 @@ $server->wsdl->addComplexType(
                                 "all",
                                 "",
                                 array(  "id" => array('name' => 'id', 'type' => 'xsd:int'),
+                                        "usuario" => array('name' => 'usuario', 'type' => 'xsd:string'),
                                         "nombre" => array('name' => 'nombre', 'type' => 'xsd:string'),
                                         "apellido" => array('name' => 'apellido', 'type' => 'xsd:string'),
                                         "dni" => array('name' => 'dni', 'type' => 'xsd:string'),
