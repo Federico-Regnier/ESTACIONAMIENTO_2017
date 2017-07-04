@@ -37,7 +37,7 @@ $(function(){
             
         }).done(function(result){
             if(result == "success"){
-                window.location.href = "main.php";
+                window.location.href = "index.php";
             } else{
                 var div = $("#divResultado");
                 div.addClass("alert alert-danger");
@@ -96,8 +96,9 @@ function editarUsuario(id){
             $("#usuario").val(empleado["usuario"]);
             $('#nombre').val(empleado["nombre"]);
             $('#apellido').val(empleado["apellido"]);
-            $('#estado').val(empleado["estado"]);
             $('#dni').val(empleado["dni"]);
+            $("#turno").val(empleado["turno"]);
+            $('#estado').val(empleado["estado"]);
             var $rol = $('#rol input:radio[name=rol]');
             $rol.removeAttr("checked");
             $rol.filter('[value='+empleado["rol"]+']').prop('checked', true);
@@ -114,6 +115,7 @@ function modificarUsuario(id){
         "nombre" : $('#nombre').val(),
         "apellido" : $("#apellido").val(),
         "dni": $("#dni").val(),
+        "turno": $("#turno").val(),
         "estado" : $("#estado").val(),
         "rol" : $("#rol input:checked").val()
     };

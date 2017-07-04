@@ -8,6 +8,24 @@ $(function(){
         event.preventDefault();
         SacarAuto();
     });
+
+    //Filtra el listado de cocheras libres por piso
+    var filterCheckboxes = $(".filter-checkboxes");
+    filterCheckboxes.on('change', function(){
+        var piso = $(this).val();
+        if(!this.checked){
+            $("#tableBody tr").each(function(){
+                if($(this).find("td:first").text() == piso)
+                    $(this).hide();
+            });
+        } else {
+            $("#tableBody tr").each(function(){
+                if($(this).find('td:first').text() == piso)
+                    $(this).show();
+            });
+        }
+        
+    });
 });
 
 function findGetParameter(parameterName) {
@@ -36,7 +54,7 @@ function TraerCocherasLibres(){
        div.html("Ingrese una patente valida");
        return ;
     }
-
+    
     if(color.val() == ""){
         div.addClass("alert alert-danger");
         div.html("Ingrese un color valido");
@@ -67,7 +85,7 @@ function TraerCocherasLibres(){
             encabezadoTabla += '<th>Piso</th><th>Numero</th><th>Reservada</th><th>&nbsp;</th>';
             encabezadoTabla += '</tr></thead>';
 
-            var cuerpoTabla = '<tbody>';
+            var cuerpoTabla = '<tbody id="tableBody">';
             for(var i = 0; i < result.length; i++){
                 cuerpoTabla += '<tr>';
                 cuerpoTabla += '<td>'+result[i]["Piso"]+'</td>';
@@ -81,7 +99,7 @@ function TraerCocherasLibres(){
                 cuerpoTabla += '</tr>';
             }
             cuerpoTabla += '</tbody></table>';
-            div.html(encabezadoTabla + cuerpoTabla);
+            div.append(encabezadoTabla + cuerpoTabla);
             div.show();
         }
     });
@@ -112,7 +130,7 @@ function SacarAuto(){
     var patente = $("#patente").val();
     patente = patente.replace(/\s/g,"");
     var urlApi = 'http://localhost/ESTACIONAMIENTO_2017/APIREST/Auto/' + patente;
-
+    var divResultado = $("#divResultado");
     $.ajax({
         url: urlApi,
         method: 'PUT',
@@ -120,7 +138,6 @@ function SacarAuto(){
         data: {"patente": patente},
         dataType: "json"
     }).done(function(result){
-        var divResultado = $("#divResultado");
         if(!$.isEmptyObject(result)){
             $("#divSacarAuto").hide();
             divResultado.removeClass();
@@ -143,9 +160,51 @@ function SacarAuto(){
             divResultado.show();
         } 
     }).fail(function(result){
-        console.log(result);
+        //console.log(result);
         divResultado.addClass("alert alert-danger col-xs-offset-0 col-sm-offset-4 col-lg-offset-4 col-xs-8 col-sm-5 col-lg-3 text-center");
         divResultado.html("No se pudo conectar con la API");
         divResultado.show();
+    });
+}
+
+function TraerCocheras(){
+    $.ajax({
+        url:"APIREST/Cocheras",
+        method: "GET",
+        dataType: "json",
+        async: true
+    }).done(function(result){
+        var div = $("#divListado");
+        var encabezadoTabla = '<table class="table table-bordered">';
+        encabezadoTabla += '<thead><tr>';
+        encabezadoTabla += '<th>Piso</th><th>Numero</th><th>Reservada</th><th>Patente</th>';
+        encabezadoTabla += '</tr></thead>';
+
+        var cuerpoTabla = '<tbody id="tableBody">';
+        for(var i = 0; i < result.length; i++){
+            if(result[i]["Estado"] == 0){
+                cuerpoTabla += '<tr class="success">';
+            } else{
+                cuerpoTabla += '<tr class="danger">';
+            }
+            cuerpoTabla += '<td>'+result[i]["Piso"]+'</td>';
+            cuerpoTabla += '<td>'+result[i]["Numero"]+'</td>';
+            cuerpoTabla += '<td>';
+            if(result[i]["Reservada"] == 1)
+                cuerpoTabla += 'Si</td>';
+            else
+                cuerpoTabla += 'No</td>';
+            cuerpoTabla += '<td>';
+            if(result[i]["Patente"] == null){
+                cuerpoTabla += "-------";
+            } else{
+                cuerpoTabla += result[i]["Patente"]+'</td>';
+            }
+            cuerpoTabla += '</tr>';
+        }
+        cuerpoTabla += '</tbody></table>';
+        div.append(encabezadoTabla + cuerpoTabla);
+        div.show();
+        
     });
 }

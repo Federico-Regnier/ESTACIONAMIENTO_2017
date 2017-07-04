@@ -16,11 +16,7 @@ include_once("checkSesion.php");
     <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
     <script src="cocheras.js"></script>
     <script src="scripts.js"></script>
-    <style>
-        body{
-            padding-top: 70px;
-        }
-    </style>
+    <link rel="stylesheet" href="estilos.css">
     <title>Estacionamiento</title>
     <?php 
     if($_SESSION["Rol"] == 2)
@@ -51,6 +47,10 @@ include_once("checkSesion.php");
         </div>
         
     </div>
-    <div id="divListado" class="well col-sm-offset-1 col-sm-10" hidden></div>
+    <div id="divListado" class="well col-sm-offset-1 col-sm-10" hidden>
+        <label class="checkbox-inline"><input type="checkbox" class="filter-checkboxes" value="1" checked>Piso 1</label>
+        <label class="checkbox-inline"><input type="checkbox" class="filter-checkboxes" value="2" checked>Piso 2</label>
+        <label class="checkbox-inline"><input type="checkbox" class="filter-checkboxes" value="3" checked>Piso 3</label>
+    </div>
 </body>
 </html>

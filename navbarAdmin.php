@@ -8,11 +8,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="main.php">Estacionamiento</a>
+        <a class="navbar-brand" href="index.php">Estacionamiento</a>
     </div> <!--/ .navbar-header -->
     <div class="navbar-collapse collapse" id="navigationbar">
         <ul class="nav navbar-nav" id="navbar">
-            <li class=""><a href="main.php">Home</a></li>
+            <li class=""><a href="index.php">Home</a></li>
+            <li><a href="cocheras.php" id="">Cocheras</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Autos <span class="caret"></span></a>
                 <ul class="dropdown-menu">

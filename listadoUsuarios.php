@@ -5,14 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
     <script src="scripts.js"></script>
+    <link rel="stylesheet" href="estilos.css">
     <?php include_once("navbarAdmin.php"); ?>
     <title>Empleados</title>
 </head>
@@ -41,6 +39,7 @@ if($resultado["Status"] == "error"){
                                 <th>Apellido</th>
                                 <th>Nombre</th>
                                 <th>DNI</th>
+                                <th>Turno</th>
                                 <th>Estado</th>
                                 <th>Fecha de Creacion</th>
                                 <th>&nbsp;</th>
@@ -64,7 +63,32 @@ if($resultado["Status"] == "error"){
                                     <?php echo $value["DNI"];?>
                                 </td>
                                 <td>
-                                    <?php echo $value["Baja"] == 0?  '<span class="label label-success">Activo' : '<span class="label label-danger">Suspendido';?>
+                                    <?php 
+                                        switch($value["Turno"]){
+                                            case 0:
+                                                echo "Ma&ntilde;ana";
+                                                break;
+                                            case 1:
+                                                echo "Tarde";
+                                                break;
+                                            default:
+                                                echo "Noche";
+                                                break;
+                                        }
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php 
+                                    switch($value["Baja"]){
+                                        case 0:
+                                            echo '<span class="label label-success">Activo';
+                                            break;
+                                        case 1:
+                                            echo '<span class="label label-warning">Suspendido';
+                                            break;
+                                        default:
+                                            echo '<span class="label label-danger">Eliminado';
+                                    }?>
                                     </span>
                                 </td>
                                 <td>
@@ -116,7 +140,7 @@ if($resultado["Status"] == "error"){
                        <span class="sr-only">Close</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    Modificar Datos del Empleado
+                    Datos del Empleado
                 </h4>
             </div> <!-- .modal-header -->
             
@@ -164,10 +188,22 @@ if($resultado["Status"] == "error"){
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-2 control-label"
+                            for="dni">Turno</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="turno" name="turno">
+                                <option value="0">Ma&ntilde;ana</option>
+                                <option value="1">Tarde</option>
+                                <option value="2">Noche</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                             <select class="form-control" id="estado" name="estado">
                                 <option value="0">Activo</option>
                                 <option value="1">Suspendido</option>
+                                <option value="2">Eliminado</option>
                             </select>
                         </div>
                     </div>
@@ -181,10 +217,7 @@ if($resultado["Status"] == "error"){
             </div><!-- .modal-body -->
             <!-- Modal Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Cerrar
-                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"> Cerrar </button>
                 <button type="button" class="btn btn-primary" onclick="modificarUsuario()">
                     Modificar
                 </button>

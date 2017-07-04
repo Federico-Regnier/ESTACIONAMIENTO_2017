@@ -18,15 +18,20 @@ if($resultado["Status"] == "error"){
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="scripts.js"></script>
+    <link rel="stylesheet" href="estilos.css">
     <?php include_once("navbarAdmin.php"); ?>
     <title>Fechas Login</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container well">
         <div id="divContenido" class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped table-bordered">
                 <thead>
+                    <th colspan="2" class="text-center">Login</th>
+                    <th colspan="2" class="text-center">Logout</th>
                     <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
                         <th>Fecha</th>
                         <th>Hora</th>
                     </tr>
@@ -34,13 +39,24 @@ if($resultado["Status"] == "error"){
                 <tbody>
                     <?php 
                     foreach ($resultado["Resultado"] as $value) {
-                        $login = new DateTime($value["Fecha"]);
-                        $dia = $login->format('d-m-Y');
-                        $hora = $login->format('H:i:s');
+                        $login = new DateTime($value["Login"]);
+                        $diaLogin = $login->format('d-m-Y');
+                        $horaLogin = $login->format('H:i:s');
+                        if($value["Logout"] != null){
+                            $logout = new DateTime($value["Logout"]);
+                            $diaLogout = $login->format('d-m-Y');
+                            $horaLogout = $login->format('H:i:s');
+                        } else{
+                            $horaLogout = "------------";
+                            $diaLogout = "---------------";
+                        }
+                        
                     ?>
                     <tr>
-                        <td> <?php echo $dia;?> </td>
-                        <td> <?php echo $hora;?> </td>
+                        <td> <?php echo $diaLogin;?> </td>
+                        <td> <?php echo $horaLogin;?> </td>
+                        <td> <?php echo $diaLogout;?> </td>
+                        <td> <?php echo $horaLogout;?> </td>
                     </tr>
                     <?php } ?>
                 </tbody>

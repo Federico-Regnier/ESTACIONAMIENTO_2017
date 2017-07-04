@@ -31,23 +31,27 @@ $(function(){
 function TraerEstadisticas(){
     var fechaInicio = $("#fechaInicio").val();
     var fechaFinal = $("#fechaFinal").val();
+    var urlEstadisticas = 'http://localhost/ESTACIONAMIENTO_2017/APIREST/Estadisticas';
     
-    if(fechaInicio == "" || fechaFinal == ""){
-        alert("Debe ingresar un rango de fechas");
-        return;
+    if(fechaInicio != "" && fechaFinal != ""){
+        urlEstadisticas += '/' + fechaInicio + '/'+ fechaFinal;
     }
-    
-    $("#tablaEstadisticas").DataTable({
-        "bFilter": false,
+    console.log(urlEstadisticas);
+    $.ajax({
+        url: urlEstadisticas,
+        method: 'GET',
+        dataType: 'json',
+        async: true
+    }).done(function(result){
+        console.log('done');
+        console.log(result);
+        $("#tablaEstadisticas").DataTable({
         "bDestroy": true,
         "order": [[ 5, "asc"]],
         "language": {
             url:'dataTablesSpanish.json'
         },
-        ajax: {
-            url: 'http://localhost/ESTACIONAMIENTO_2017/APIREST/Cocheras/'+fechaInicio+'/'+fechaFinal,
-            dataSrc: ''
-        },
+        data: result["Usadas"],
         columns: [
             { data: 'Piso'},
             { data: 'Numero'},
@@ -58,18 +62,19 @@ function TraerEstadisticas(){
             { data: 'Fecha_Salida'},
             { data: 'Importe'}
         ]
-    });
-
-    $.ajax({
-        url: 'http://localhost/ESTACIONAMIENTO_2017/APIREST/Estadisticas/'+fechaInicio+'/'+fechaFinal,
-        method: 'GET',
-    }).done(function(result){
+        });
+        
         var div = $("#estadisticasCocheras");
         div.html("");
 
         // Verifico que se haya usado alguna cochera
         if(!$.isEmptyObject(result["cocheraMasUsada"])){
             div.append("<h2>Cochera mas usada</h2>" + "Numero " + result["cocheraMasUsada"]["Numero"] + " piso " + result["cocheraMasUsada"]["Piso"]);
+        }
+
+        // Verifico que se haya usado alguna cochera
+        if(!$.isEmptyObject(result["cocheraMenosUsada"])){
+            div.append("<h2>Cochera menos usada</h2>" + "Numero " + result["cocheraMenosUsada"]["Numero"] + " piso " + result["cocheraMenosUsada"]["Piso"]);
         }
 
         // Verifico que haya cocheras sin usar
@@ -84,7 +89,10 @@ function TraerEstadisticas(){
             listado += '</ul>';
             div.append(listado);
         }
+        $("#divResultado").show();
+    }).fail(function(result){
+        $("#divContenido").prepend('<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Error al comunicarse con la API</div>');
     });
     
-    $("#divResultado").show();
+    
 }

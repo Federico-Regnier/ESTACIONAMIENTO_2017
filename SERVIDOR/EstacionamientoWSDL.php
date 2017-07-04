@@ -35,6 +35,7 @@ $server->wsdl->addComplexType(
                                         "nombre" => array('name' => 'nombre', 'type' => 'xsd:string'),
                                         "apellido" => array('name' => 'apellido', 'type' => 'xsd:string'),
                                         "dni" => array('name' => 'dni', 'type' => 'xsd:string'),
+                                        "turno" => array('name' => 'turno', 'type' => 'xsd:int'),
                                         "estado" => array('name' => 'estado', 'type' => 'xsd:int'),
                                         "rol" => array('name' => 'rol', 'type' => 'xsd:int')
                                         )
@@ -113,6 +114,16 @@ $server->register('BorrarUsuario',
                     'Borra un usuario'
 );
 
+$server->register('RegistrarLogout',
+                    array("id" => 'xsd:int'),
+                    array("Resultado" => 'xsd:string'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#BorrarUsuario',
+                    'rpc',
+                    'encoded',
+                    'Borra un usuario'
+);
+
 $server->register('DatosLoginUsuario',
                     array('id' => 'xsd:int'),
                     array("Resultado" => 'xsd:Array'),
@@ -166,6 +177,10 @@ function BorrarUsuario($id){
 
 function DatosLoginUsuario($id){
     return Usuario::DatosLoginUsuario($id);
+}
+
+function RegistrarLogout($id){
+    return Usuario::RegistrarLogout($id);
 }
 
 $HTTP_RAW_POST_DATA = file_get_contents("php://input");

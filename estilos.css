@@ -1,0 +1,12 @@
+html{
+    height:100%;
+    min-height:100%;
+}
+body{
+    padding-top: 70px;
+    background-image: url("website-wallpaper-2.jpg");
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    background-size: cover;
+    background-color: #0A386A;
+}

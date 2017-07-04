@@ -22,7 +22,7 @@ include_once("checkSesionAdmin.php");
     <title>Estadisticas</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="divContenido">
         <div>
             <form class="form-inline" role="form" id="formEstadisticas">
                 <div class="form-group">

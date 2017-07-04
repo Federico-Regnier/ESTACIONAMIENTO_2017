@@ -34,6 +34,7 @@ if(isset($_POST["ModificarUsuario"])){
         "nombre" => $_POST["nombre"],
         "apellido" => $_POST["apellido"],
         "dni" => $_POST["dni"],
+        "turno" => $_POST["turno"],
         "rol" => $_POST["rol"],
         "estado" => $_POST["estado"]
     );
@@ -58,6 +59,8 @@ if(isset($_POST["Borrar"])){
 
 if(isset($_GET["Logout"])){
     include_once("checkSesion.php");
+    include_once("cliente.php");
+    Cliente::Execute('RegistrarLogout', array($_SESSION["ID"]));
     if(session_destroy()){
         echo "success";
     } else{

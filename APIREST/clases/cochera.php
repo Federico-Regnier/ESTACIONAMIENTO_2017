@@ -177,23 +177,18 @@ class Cochera implements JsonSerializable{
         }
     }
 
-    public static function RetornarCocherasUsadas($fechaInicio, $fechaFin){
+    public static function TraerTodas(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT m.Patente,
-                                                       m.Color,
-                                                       m.Marca,
-                                                       m.Fecha_Ingreso,
-                                                       m.Fecha_Salida,
-                                                       m.Importe,
-                                                       c.Piso,
-                                                       c.Numero
-                                                FROM Movimientos m
-                                                INNER JOIN Cochera c ON m.ID_Cochera = c.ID
-                                                WHERE Fecha_Ingreso >= :fechaInicio AND Fecha_Salida <= :fechaFin
-                                                ORDER BY Fecha_Ingreso");
-            $consulta->bindValue(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
-            $consulta->bindValue(':fechaFin', $fechaFin, PDO::PARAM_STR);
+            $consulta = $pdo->RetornarConsulta("SELECT  c.ID, 
+                                                        c.Piso, 
+                                                        c.Numero, 
+                                                        c.Reservada, 
+                                                        c.Estado,
+                                                        m.Patente 
+                                                FROM Cochera c
+                                                LEFT OUTER JOIN Movimientos m ON c.ID = m.ID_Cochera AND m.Fecha_Salida IS NULL 
+                                                ORDER BY Piso, Numero");
             $consulta->execute();
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
             
@@ -202,44 +197,5 @@ class Cochera implements JsonSerializable{
         }
     }
     
-    public static function EstadisticasCochera($fechaInicio, $fechaFin){
-        try{
-            $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT c.Piso,
-                                                       c.Numero,
-                                                       COUNT(ID_Cochera) as cantidad
-                                                FROM Movimientos m
-                                                INNER JOIN Cochera c ON m.ID_Cochera = c.ID
-                                                WHERE m.Fecha_Ingreso >= :fechaInicio AND m.Fecha_Salida <= :fechaFin
-                                                GROUP BY ID_Cochera
-                                                ORDER BY cantidad DESC
-                                                LIMIT 1
-                                                ");
-            $consulta->bindValue(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
-            $consulta->bindValue(':fechaFin', $fechaFin, PDO::PARAM_STR);
-            $consulta->execute();
-            $cocheraMasUsada = $consulta->fetch(PDO::FETCH_ASSOC);
-            $consulta = $pdo->RetornarConsulta("SELECT c.Piso,
-                                                       c.Numero
-                                                FROM Cochera c
-                                                WHERE   NOT EXISTS(
-                                                        SELECT  null 
-                                                        FROM    Movimientos m
-                                                        WHERE   Fecha_Ingreso >= :fechaInicio 
-                                                            AND Fecha_Salida <= :fechaFin 
-                                                            AND m.ID_Cochera = c.ID
-                                                    )
-                                                ");
-            $consulta->bindValue(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
-            $consulta->bindValue(':fechaFin', $fechaFin, PDO::PARAM_STR);
-            $consulta->execute();
-            $cocherasSinUsar = $consulta->fetchAll(PDO::FETCH_ASSOC);
-
-            return array("cocheraMasUsada" => $cocheraMasUsada, "cocherasSinUsar" => $cocherasSinUsar);
-            
-        } catch(PDOException $err){
-            return AccesoDatos::ErrorMessageDB($err);
-        }
-    }
 }
 ?>

@@ -29,7 +29,7 @@ class Usuario{
     public static function TraerUsuarios(){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT ID, Apellido, Nombre,  DNI, Usuario, Rol, Fecha, Baja FROM Usuarios  WHERE Baja != 2 ORDER BY Apellido, Nombre");
+            $consulta = $pdo->RetornarConsulta("SELECT ID, Apellido, Nombre,  DNI, Usuario, Turno, Rol, Fecha, Baja FROM Usuarios ORDER BY Apellido, Nombre");
             $consulta->execute();
             return $consulta->fetchall(PDO::FETCH_ASSOC);
         } catch(PDOException $err){
@@ -46,7 +46,8 @@ class Usuario{
                                                         Usuario as usuario,
                                                         Nombre as nombre, 
                                                         Apellido as apellido, 
-                                                        DNI as dni, 
+                                                        DNI as dni,
+                                                        Turno as turno, 
                                                         Baja as estado, 
                                                         Rol as rol
                                                 FROM Usuarios 
@@ -71,7 +72,8 @@ class Usuario{
             $consulta = $pdo->RetornarConsulta("UPDATE Usuarios
                                                 SET Nombre =:nombre, 
                                                     Apellido =:apellido, 
-                                                    DNI =:dni, 
+                                                    DNI =:dni,
+                                                    Turno =:turno, 
                                                     Baja =:estado, 
                                                     Rol =:rol
                                                 WHERE ID =:id");
@@ -79,7 +81,8 @@ class Usuario{
             $consulta->bindValue(":nombre",$usuario["nombre"], PDO::PARAM_STR);
             $consulta->bindValue(":apellido",$usuario["apellido"], PDO::PARAM_STR);
             $consulta->bindValue(":dni",$usuario["dni"], PDO::PARAM_STR);
-            $consulta->bindValue(":estado",$usuario["estado"], PDO::PARAM_STR);
+            $consulta->bindValue(":turno", $usuario["turno"], PDO::PARAM_INT);
+            $consulta->bindValue(":estado",$usuario["estado"], PDO::PARAM_INT);
             $consulta->bindValue(":rol",$usuario["rol"], PDO::PARAM_STR);
             $consulta->execute();
             return $consulta->rowCount() > 0 ? "success" : "Error al modificar el usuario";
@@ -136,7 +139,7 @@ class Usuario{
     public static function RegistrarLogin($id){
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("INSERT INTO login_usuarios VALUES (:id, NOW())");
+            $consulta = $pdo->RetornarConsulta("INSERT INTO login_usuarios(ID_Usuario, Login) VALUES (:id, NOW())");
             $consulta->bindValue(":id", $id, PDO::PARAM_INT);
             return $consulta->execute();
         } catch(PDOException $err){
@@ -195,7 +198,7 @@ class Usuario{
         }
         try{
             $pdo = AccesoDatos::getAccesoDB();
-            $consulta = $pdo->RetornarConsulta("SELECT Fecha 
+            $consulta = $pdo->RetornarConsulta("SELECT Login, Logout 
                                                 FROM login_usuarios
                                                 WHERE ID_Usuario =:id");
             $consulta->bindValue(":id", $id, PDO::PARAM_INT);
@@ -203,6 +206,23 @@ class Usuario{
             return $consulta->fetchall(PDO::FETCH_ASSOC);
         } catch(PDOException $err){
             return array();
+        }
+    }
+
+    public static function RegistrarLogout($id){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("UPDATE `login_usuarios` usr,
+                                                (SELECT ID FROM login_usuarios WHERE ID_Usuario = :id AND Logout IS NULL ORDER BY ID DESC LIMIT 1) as tmp
+                                                SET Logout = NOW()
+                                                WHERE usr.ID = tmp.ID ");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            if($consulta->execute()){
+                return "success";
+            }
+            return "error";
+        } catch(PDOException $err){
+            return "error";
         }
     }
 }
