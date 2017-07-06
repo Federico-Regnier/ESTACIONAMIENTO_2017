@@ -1,9 +1,7 @@
 <?php
-if(isset($_POST["usuario"]) && isset($_POST["password"]) && isset($_POST["rol"])){
+if(isset($_POST["AgregarUsuario"])){
     require_once("cliente.php");
     
-    // TODO: escape input characters
-    // TODO: encrypt password and send hash
     $usuario = array(
         "usuario" => $_POST["usuario"],
         "pass" => $_POST["password"],

@@ -14,6 +14,7 @@ include_once("checkSesionAdmin.php");
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
     <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
     <script src="estadisticas.js"></script>
+    <link rel="stylesheet" href="estilos.css">
     <?php include("navbarAdmin.php");?>
     <style>
         label{
@@ -23,7 +24,7 @@ include_once("checkSesionAdmin.php");
     <title>Estadisticas</title>
 </head>
 <body>
-    <div class="container" id="divContenido">
+    <div class="container well" id="divContenido">
         <div>
             <form class="form-inline" role="form" id="formEstadisticas">
                 <div class="form-group">

@@ -90,12 +90,13 @@ class Cochera implements JsonSerializable{
     } 
 
     private function CalcularImporte(){
+        $precios = Cochera::GetPrecios();
         if($this->tiempo < 9){
-            $this->importe = ($this->tiempo + 1) * 10;
+            $this->importe = ($this->tiempo + 1) * $precios["Hora"];
         } else if($this->tiempo <= 12){
-            $this->importe = 90;
+            $this->importe = $precios["Media_Estadia"];
         } else{
-            $this->importe = ceil($this->tiempo / (float)24) * 170;
+            $this->importe = ceil($this->tiempo / (float)24) * $precios["Estadia"];
         }
     }
 

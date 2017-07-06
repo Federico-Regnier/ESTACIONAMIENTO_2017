@@ -8,11 +8,17 @@ $(function(){
         }
     });
     
+    // Envia el formulario con los datos de registro al adminUsuarios
     $("#userForm").submit(function(event){
         event.preventDefault();
+
+        //Serializa el form y le agrega la clave AgregarUsuario
+        var data = $("#userForm").serializeArray();
+        data.push({name:"AgregarUsuario", value: true});
+
         $.ajax({
             url: "adminUsuarios.php",
-            data: $("#userForm").serialize(),
+            data: $.param(data),
             method: "POST",
            dataType: "json" 
         }).done(function(result){
@@ -25,7 +31,8 @@ $(function(){
         });
     });
 
-   $("#loginForm").submit(function(event){
+    // Envia el formulario con los datos de login al adminUsuarios
+    $("#loginForm").submit(function(event){
         event.preventDefault();
         var data = $("#loginForm").serializeArray();
         data.push({name:"Login", value: true});
@@ -46,6 +53,7 @@ $(function(){
         });
     });
 
+    // Envia una peticion de logout al adminUsuarios
     $("#logout").on('click',function(event){
         event.preventDefault();
         $.ajax({
