@@ -25,7 +25,7 @@ include_once("checkSesion.php");
 </head>
 <body>
     <div class="container" id="divContenido">
-        <img class="img-responsive" src="parkinglot.jpg" style="max-height: 850px;"/>
+        <img class="img-responsive" src="IMAGENES/parkinglot.jpg" style="max-height: 850px;"/>
     </div>
 </body>
 </html>

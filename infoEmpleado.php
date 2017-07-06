@@ -25,7 +25,7 @@ if($resultado["Status"] == "error"){
 <body>
     <div class="container well">
         <div id="divContenido" class="table-responsive">
-            <table class="table table-striped table-bordered">
+            <table class="table table-bordered">
                 <thead>
                     <th colspan="2" class="text-center">Login</th>
                     <th colspan="2" class="text-center">Logout</th>

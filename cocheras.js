@@ -139,8 +139,8 @@ function SacarAuto(){
         dataType: "json"
     }).done(function(result){
         if(!$.isEmptyObject(result)){
-            $("#divSacarAuto").hide();
             divResultado.removeClass();
+            $("#divSacarAuto").hide();
             var html = '<div class="container">';
             html += '<ul class="list-group">';
             html +=  '<li class="list-group-item">'+result["Patente"]+'</li>';
@@ -155,13 +155,16 @@ function SacarAuto(){
                 window.location.href = "sacarAuto.php";
             });
         } else{
-            divResultado.addClass("alert alert-danger col-xs-offset-0 col-sm-offset-4 col-lg-offset-4 col-xs-8 col-sm-5 col-lg-3 text-center");
+            if(!divResultado.hasClass('alert')){
+                divResultado.addClass("alert alert-danger col-sm-offset-4 col-lg-offset-4 col-xs-8 col-sm-6 col-lg-4");
+            }
             divResultado.html("Auto no encontrado");
             divResultado.show();
         } 
     }).fail(function(result){
-        //console.log(result);
-        divResultado.addClass("alert alert-danger col-xs-offset-0 col-sm-offset-4 col-lg-offset-4 col-xs-8 col-sm-5 col-lg-3 text-center");
+        if(!divResultado.hasClass('alert')){
+            divResultado.addClass("alert alert-danger col-sm-offset-4 col-lg-offset-4 col-xs-8 col-sm-6 col-lg-4");
+        }
         divResultado.html("No se pudo conectar con la API");
         divResultado.show();
     });

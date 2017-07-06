@@ -38,6 +38,10 @@ $app->get('/Estadisticas', function(Request $request, Response $response){
     return $response->withJson(Estadisticas::TraerTodas(), 200);
 });
 
+$app->get('/Precios', function(Request $request, Response $response){
+    return $response->withJson(Cochera::GetPrecios(), 200);
+});
+
 $app->post('/Auto', function(Request $request, Response $response){
         $arr = $request->getParsedBody();
         $idUsuario = $arr["idUsuario"];
@@ -62,6 +66,18 @@ $app->put('/Auto/{patente}',function(Request $request, Response $response){
         return $response->withJson(array(), 200);
     } 
     $resultado = $cochera->SacarAuto();
+    return $response->withJson($resultado, 200);
+});
+
+$app->put('/Precios',function(Request $request, Response $response){
+    $arr = $request->getParsedBody();
+    $hora = $arr["Hora"];
+    $mediaEstadia = $arr["MediaEstadia"];
+    $estadia = $arr["Estadia"];
+    if($hora === null || $mediaEstadia === null || $estadia === null){
+        return $response->withJson("error", 200);
+    } 
+    $resultado = Cochera::ModificarPrecios($hora, $mediaEstadia, $estadia);
     return $response->withJson($resultado, 200);
 });
 

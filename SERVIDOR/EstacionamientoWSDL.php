@@ -104,6 +104,16 @@ $server->register('ModificarUsuario',
                     'Modifica un usuario segun su id'
 );
 
+$server->register('ModificarPass',
+                    array("id" => 'xsd:int', "passActual" => 'xsd:string', "passNueva" => 'xsd:string'),
+                    array("Resultado" => 'xsd:string'),
+                    'urn:EstacionamientoWSDL',
+                    'urn:EstacionamientoWSDL#ModificarPass',
+                    'rpc',
+                    'encoded',
+                    'Modifica la password de un usuario'
+);
+
 $server->register('BorrarUsuario',
                     array("id" => 'xsd:int'),
                     array("Resultado" => 'xsd:string'),
@@ -169,6 +179,10 @@ function TraerUsuario($id){
 
 function ModificarUsuario($empleado){
     return Usuario::ModificarUsuario($empleado);
+}
+
+function ModificarPass($id, $passActual, $passNueva){
+    return Usuario::ModificarPass($id, $passActual, $passNueva);
 }
 
 function BorrarUsuario($id){

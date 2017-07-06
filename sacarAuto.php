@@ -30,18 +30,16 @@ include_once("checkSesion.php");
         include_once("navbarEmpleado.html");?>
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container">
         <div id="divResultado" hidden></div>
-        <div class="well col-xs-offset-0 col-sm-offset-4 col-lg-offset-4 col-sm-5 col-xs-8 col-lg-3" id="divSacarAuto">
-            <form action="#" class="form-inline" id="formSacarAuto">
-                <div class="row">
+        <div class="well col-sm-offset-3 col-lg-offset-3 col-xs-8 col-sm-6 col-lg-4" id="divSacarAuto" align="center">
+            <form action="#" class="form-inline col-lg-offset-1" id="formSacarAuto">
                     <div class="form-group">
                         <input type="text" class="form-control" id="patente" placeholder="Patente"/>
                     </div>
                     <div class="form-group">
                         <button type="button" class="btn btn-primary" id="btnSacarAuto" onclick="SacarAuto()">Sacar Auto</button>
                     </div>
-                </div>
             </form>
         </div>
     </div>

@@ -46,6 +46,22 @@ if(isset($_POST["ModificarUsuario"])){
     }
 }
 
+if(isset($_POST["CambiarPass"])){
+    session_start();
+    if(!isset($_SESSION["ID"])){
+        echo "Error de Sesion. Intentelo nuevamente mas tarde";
+        die();
+    }
+
+    require_once("cliente.php");
+    $resultado = Cliente::Execute('ModificarPass', array($_SESSION["ID"], $_POST["passActual"], $_POST["passNueva"]));
+    if($resultado["Status"] == "error"){
+        echo "No se pudo comunicar con el web service.";
+    } else {
+        echo $resultado["Resultado"];
+    }
+}
+
 if(isset($_POST["Borrar"])){
     include_once("cliente.php");
     $resultado = Cliente::Execute('BorrarUsuario', array($_POST["id"]));

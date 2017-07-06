@@ -196,6 +196,39 @@ class Cochera implements JsonSerializable{
             return AccesoDatos::ErrorMessageDB($err);
         }
     }
+
+    public static function GetPrecios(){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("SELECT  Hora,
+                                                        Media_Estadia,
+                                                        Estadia 
+                                                FROM Precios");
+            $consulta->execute();
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+            
+        } catch(PDOException $err){
+            return AccesoDatos::ErrorMessageDB($err);
+        }
+    }
+
+    public static function ModificarPrecios($hora, $mediaEstadia, $estadia){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("UPDATE Precios
+                                                SET     Hora = :hora,
+                                                        Media_Estadia = :mediaEstadia,
+                                                        Estadia = :estadia");
+            $consulta->bindValue(":hora", $hora, PDO::PARAM_STR);
+            $consulta->bindValue(":mediaEstadia", $mediaEstadia, PDO::PARAM_STR);
+            $consulta->bindValue(":estadia", $estadia, PDO::PARAM_STR);
+            $consulta->execute();
+            return $consulta->rowCount() > 0? "success" : "error";
+            
+        } catch(PDOException $err){
+            return "Error al comunicarse con la base de datos.";
+        }
+    }
     
 }
 ?>

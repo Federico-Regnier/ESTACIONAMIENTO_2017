@@ -93,6 +93,25 @@ class Usuario{
 
     }
 
+    public static function ModificarPass($id, $passActual, $passNueva){
+        try{
+            $pdo = AccesoDatos::getAccesoDB();
+            $consulta = $pdo->RetornarConsulta("UPDATE Usuarios SET Password= :passNueva WHERE ID = :id && Password = :passActual");
+            $consulta->bindValue(":id", $id, PDO::PARAM_INT);
+            $consulta->bindValue(":passNueva", $passNueva, PDO::PARAM_STR);
+            $consulta->bindValue(":passActual", $passActual, PDO::PARAM_STR);
+            $consulta->execute();
+            if($consulta->rowCount() > 0){
+                return "success";
+            }
+            return "Contrase&ntilde;a incorrecta";
+            
+        } catch(PDOException $err){
+            return "Error al comunicarse con la base de datos";
+        }
+
+    }
+
     public static function ExisteUsuario($username){
         if(empty($username))
             die();
