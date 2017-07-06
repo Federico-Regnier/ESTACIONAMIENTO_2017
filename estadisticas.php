@@ -25,9 +25,9 @@ include_once("checkSesionAdmin.php");
     <title>Estadisticas</title>
 </head>
 <body>
-    <div class="container well" id="divContenido">
+    <div class="container well col-sm-offset-1 col-sm-10 col-lg-offset-3 col-lg-6" id="divContenido">
         <div>
-            <form class="form-inline" role="form" id="formEstadisticas">
+            <form class="form-inline" role="form" id="formEstadisticas" align="center">
                 <div class="form-group">
                     <label for="fechaInicio">Desde</label>
                     <input type="date" class="form-control" id="fechaInicio">

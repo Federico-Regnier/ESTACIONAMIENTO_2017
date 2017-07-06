@@ -16,15 +16,12 @@ function TraerEstadisticas(){
     if(fechaInicio != "" && fechaFinal != ""){
         urlEstadisticas += '/' + fechaInicio + '/'+ fechaFinal;
     }
-    console.log(urlEstadisticas);
     $.ajax({
         url: urlEstadisticas,
         method: 'GET',
         dataType: 'json',
         async: true
     }).done(function(result){
-        console.log('done');
-        console.log(result);
         $("#tablaEstadisticas").DataTable({
         "bDestroy": true,
         "order": [[ 5, "asc"]],
