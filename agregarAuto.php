@@ -14,8 +14,8 @@ include_once("checkSesion.php");
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
-    <script src="cocheras.js"></script>
-    <script src="scripts.js"></script>
+    <script src="scripts/cocheras.js"></script>
+    <script src="scripts/scripts.js"></script>
     <link rel="stylesheet" href="estilos.css">
     <title>Estacionamiento</title>
     <?php 
@@ -29,7 +29,7 @@ include_once("checkSesion.php");
         <div class="col-sm-offset-4 col-sm-4" id="divResultado" >
         </div>
         <div class="well col-sm-offset-4 col-sm-4">
-            <form action="#">
+            <form action="#" id="formAgregarAuto">
                 <div>
                     <label for="patente">Patente</label>
                     <input type="text" class="form-control" id="patente"/>

@@ -26,7 +26,7 @@ $(function(){
         var data = $("#passForm").serializeArray();
         data.push({name: "CambiarPass", value: true});
         $.ajax({
-            url: "adminUsuarios.php",
+            url: "ADMINISTRADOR/adminUsuarios.php",
             data: $.param(data),
             method: "POST",
         }).done(function(result){

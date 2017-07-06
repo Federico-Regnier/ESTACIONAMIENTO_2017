@@ -1,15 +1,23 @@
 $(function(){
+    // Actualiza el div segun los parametros de la url
     if(findGetParameter("success")){
         $("#divResultado").addClass("alert alert-success alert-dismissable");
         $("#divResultado").append('<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>');
         $("#divResultado").append('Auto agregado con exito');
     }
+
+    // Ejecuta SacarAuto cuando se hace un submit del form
     $("#formSacarAuto").submit(function(event){
         event.preventDefault();
         SacarAuto();
     });
 
-    //Filtra el listado de cocheras libres por piso
+    $("#formAgregarAuto").submit(function(event){
+        event.preventDefault();
+        TraerCocherasLibres();
+    });
+
+    //Filtra el listado de cocheras libres por piso segun las checkbox
     var filterCheckboxes = $(".filter-checkboxes");
     filterCheckboxes.on('change', function(){
         var piso = $(this).val();
@@ -28,6 +36,7 @@ $(function(){
     });
 });
 
+// Devuelve los parametros GET de la url
 function findGetParameter(parameterName) {
     var result = null,
         tmp = [];
@@ -41,6 +50,7 @@ function findGetParameter(parameterName) {
     return result;
 }
 
+// Devuelve un listado con las cocheras libres
 function TraerCocherasLibres(){
     var patente = $("#patente");
     var color = $("#color");
@@ -105,6 +115,7 @@ function TraerCocherasLibres(){
     });
 }
 
+// Envia una peticion GET al API para ingresar el auto a la cochera
 function IngresarAuto(id){
     var patente = $("#patente").val();
     patente = patente.replace(/\s/g,"").toUpperCase();
@@ -126,6 +137,7 @@ function IngresarAuto(id){
     });
 }
 
+// Envia una peticion PUT al API para sacar el auto a la cochera
 function SacarAuto(){
     var patente = $("#patente").val();
     patente = patente.replace(/\s/g,"");
@@ -170,9 +182,10 @@ function SacarAuto(){
     });
 }
 
+// Retorna un listado con todas las cocheras
 function TraerCocheras(){
     $.ajax({
-        url:"APIREST/Cocheras",
+        url:"http://localhost/ESTACIONAMIENTO_2017/APIREST/Cocheras",
         method: "GET",
         dataType: "json",
         async: true

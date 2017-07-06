@@ -72,7 +72,11 @@ if(isset($_POST["Borrar"])){
 }
 
 if(isset($_GET["Logout"])){
-    include_once("checkSesion.php");
+    session_start();
+    if(!isset($_SESSION["ID"])){
+        echo "Error de Sesion. Intentelo nuevamente mas tarde";
+        die();
+    }
     include_once("cliente.php");
     Cliente::Execute('RegistrarLogout', array($_SESSION["ID"]));
     if(session_destroy()){

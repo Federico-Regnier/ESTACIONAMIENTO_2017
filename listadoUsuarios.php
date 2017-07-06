@@ -9,7 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
-    <script src="scripts.js"></script>
+    <script src="scripts/scripts.js"></script>
+    <script src="scripts/usuarios.js"></script>
     <link rel="stylesheet" href="estilos.css">
     <?php include_once("navbarAdmin.php"); ?>
     <title>Empleados</title>
@@ -95,7 +96,7 @@ if($resultado["Status"] == "error"){
                                     <?php echo $value["Fecha"];?>
                                 </td>
                                 <td style="width: 20%;">
-                                    <a href="infoEmpleado.php?id=<?php echo $value["ID"];?>" class="table-link" id="infoLink">
+                                    <a href="loginEmpleado.php?id=<?php echo $value["ID"];?>" class="table-link" id="infoLink">
                                         <span class="fa-stack">
                                             <i class="fa fa-square fa-stack-2x"></i>
                                             <i class="fa fa-search-plus fa-stack-1x fa-inverse"></i>

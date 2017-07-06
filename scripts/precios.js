@@ -6,6 +6,7 @@ $(function(){
     });
 });
 
+// Trae el array de precios del API y los carga en el form
 function TraerPrecios(){
     let divResultado = $("#divResultado");
     $.ajax({
@@ -32,7 +33,7 @@ function TraerPrecios(){
         divResultado.show();
     });
 }
-
+// Envia una peticion PUT al API con los nuevos precios del form
 function ModificarPrecios(){
     let precioHora = $("#precioHora").val();
     let precioMediaEstadia = $("#precioMediaEstadia").val();

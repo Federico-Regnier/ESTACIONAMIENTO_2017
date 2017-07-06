@@ -3,7 +3,10 @@
 class Cliente
 {
     static function Execute($metodo, $input){
+        $root = realpath($_SERVER["DOCUMENT_ROOT"]);
+
         require_once("SERVIDOR/lib/nusoap.php");
+
         $host = "http://localhost/ESTACIONAMIENTO_2017/SERVIDOR/EstacionamientoWSDL.php";
         $client = new nusoap_client($host . '?wsdl');
 
